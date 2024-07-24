@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="_template.xhtml">
+	<f:metadata>
+		<f:viewParam name="sentencaId" value="#{cenaBean.sentencaDaCena.id}" />
+		<f:viewAction action="#{cenaBean.carregarSentencaPeloId}"
+			if="#{param.sentencaId != null}" />
+
+		<f:viewParam name="cenaId" value="#{cenaBean.cena.id}" />
+		<f:viewAction action="#{cenaBean.carregarCenaPeloId}"
+			if="#{param.cenaId != null}" />
+
+		<f:viewParam name="cenaAnteriorId" value="#{cenaBean.cenaAnterior.id}" />
+		<f:viewAction action="#{cenaBean.carregarCenaAnteriorPeloId}"
+			if="#{param.cenaAnteriorId != null}" />
+
+		<f:viewParam name="cenaPosteriorId"
+			value="#{cenaBean.cenaPosterior.id}" />
+		<f:viewAction action="#{cenaBean.carregarCenaPosteriorPeloId}"
+			if="#{param.cenaPosteriorId != null}" />
+	</f:metadata>
+	<ui:define name="conteudo">
+		<p:staticMessage id="semAcesso"
+			rendered="#{!cenaBean.isAutorDoProjeto()}" severity="error"
+			detail="Você não possui acesso a este projeto!" summary="ERRO!"
+			style="margin-top: 30px; height: 30px" />
+		<h:form rendered="#{cenaBean.isAutorDoProjeto()}">
+
+			<p:breadCrumb>
+				<p:menuitem value="Meus Projetos" url="inicio.xhtml" />
+				<p:menuitem value="#{cenaBean.projeto.nome}"
+					url="gerenciarProjeto.xhtml?projetoId=#{cenaBean.projeto.id}" />
+				<p:menuitem value="#{languageBean.labelManage}"
+					url="gerenciarProjeto.xhtml?projetoId=#{cenaBean.projeto.id}" />
+				<p:menuitem value="#{languageBean.cenaCompor}"
+					url="escolherSentencaParaCena.xhtml?projetoId=#{cenaBean.projeto.id}" />
+				<p:menuitem value="#{cenaBean.cena.titulo}" url="#" />
+			</p:breadCrumb>
+
+			<p:outputPanel>
+				<h3>
+					<h:outputText value="#{languageBean.cenaCompor}"/> ::
+					<h:outputText value="#{cenaBean.projeto.nome}" />
+				</h3>
+			</p:outputPanel>
+
+			<h:panelGrid columns="2" rendered="#{cenaBean.sentencaDaCena.id > 0}">
+				<p:outputLabel for="sentenca" value="#{languageBean.sentencaClmSentenca}: " />
+				<p:inputText disabled="true" id="sentenca" size="80"
+					value="#{cenaBean.sentencaDaCena.getSentencaCompleta()}" />
+			</h:panelGrid>
+
+			<p:outputPanel>
+				<h3>
+					<h:outputText rendered="#{param.cenaId != null}"
+						value="#{languageBean.personagemLblEditando}" style="color: red" />
+					<h:outputText rendered="#{param.cenaAnteriorId != null}"
+						value="#{languageBean.cenaAdicional}" style="color: red" />
+					<h:outputText rendered="#{param.cenaPosteriorId != null}"
+						value="#{languageBean.cenaAdicional}" style="color: red" />
+				</h3>
+			</p:outputPanel>
+
+			<p:fieldset legend="#{languageBean.cenaAnterior}"
+				rendered="#{cenaBean.cenaAnterior.id > 0}">
+				<h:panelGrid columns="2">
+					<p:outputLabel for="cenaAnterior" value="#{languageBean.labelTitulo}: " />
+					<p:inputTextarea disabled="true" id="cenaAnterior" rows="3"
+						cols="50" value="#{cenaBean.cenaAnterior.titulo}" />
+				</h:panelGrid>
+			</p:fieldset>
+
+			<p:fieldset legend="#{languageBean.cenaPosterior}"
+				rendered="#{cenaBean.cenaPosterior.id > 0}">
+				<h:panelGrid columns="2">
+					<p:outputLabel for="cenaPosterior" value="#{languageBean.labelTitulo}: " />
+					<p:inputTextarea disabled="true" id="cenaPosterior" rows="3"
+						cols="50" value="#{cenaBean.cenaPosterior.titulo}" />
+				</h:panelGrid>
+			</p:fieldset>
+
+			<p:fieldset legend="#{languageBean.cenaDados}">
+				<h:panelGrid columns="4">
+					<p:outputLabel for="titulo" value="#{languageBean.labelTitulo}: " />
+					<p:inputTextarea id="titulo" rows="3" cols="50"
+						value="#{cenaBean.cena.titulo}" required="true" />
+					<h:outputLink id="helpTitulo" value="#">
+						<i class="pi pi-question-circle"></i>
+					</h:outputLink>
+					<p:tooltip for="helpTitulo" value="Título para salvar a cena."
+						position="top" />
+
+					<p:outputLabel for="descricaoBreve" value="#{languageBean.labelDescricaoCurta}: " />
+					<p:inputTextarea id="descricaoBreve" rows="10" cols="50"
+						value="#{cenaBean.cena.descricaoBreve}" />
+					<h:outputLink id="helpDescricaoBreve" value="#">
+						<i class="pi pi-question-circle"></i>
+					</h:outputLink>
+					<p:tooltip for="helpDescricaoBreve"
+						value="Descrição resumida do que acontece durante a cena, na sequência dos eventos."
+						position="top" />
+
+					<p:outputLabel for="local" value="#{languageBean.cenaLocal}: " />
+					<p:inputTextarea id="local" rows="3" cols="50"
+						value="#{cenaBean.cena.local}" />
+					<h:outputLink id="helpLocal" value="#">
+						<i class="pi pi-question-circle"></i>
+					</h:outputLink>
+					<p:tooltip for="helpLocal"
+						value="Nome do local onde a cena ocorre." position="top" />
+
+					<p:outputLabel for="tipoDeLocal" value="#{languageBean.cenaTipoLocal}: " />
+					<p:selectOneRadio id="tipoDeLocal"
+						value="#{cenaBean.cena.tipoDeLocal}">
+						<f:selectItems value="#{cenaBean.tiposDeLocal}" />
+					</p:selectOneRadio>
+					<h:outputLink id="helpTipoDeLocal" value="#">
+						<i class="pi pi-question-circle"></i>
+					</h:outputLink>
+					<p:tooltip for="helpTipoDeLocal"
+						value="Indicação se a cena ocorre em um cenário interno ou em ambiente externo."
+						position="top" />
+
+					<p:outputLabel for="tempo" value="#{languageBean.cenaTempo}: " />
+					<p:inputTextarea id="tempo" rows="3" cols="50"
+						value="#{cenaBean.cena.tempo}" />
+					<h:outputLink id="helpTempo" value="#">
+						<i class="pi pi-question-circle"></i>
+					</h:outputLink>
+					<p:tooltip for="helpTempo"
+						value="Informação sobre quando a cena ocorre, em que momento ela acontece."
+						position="top" />
+
+					<p:outputLabel for="personagens" value="#{languageBean.labelPersonagens}: " />
+					<p:pickList id="personagens"
+						converter="personagemPickListConverter"
+						value="#{cenaBean.personagensDoProjeto}" var="personagem"
+						itemLabel="#{personagem.nome}" itemValue="#{personagem}">
+
+						<f:facet name="sourceCaption"><h:outputText value="#{languageBean.cenaPersonagemDisponivel}"/></f:facet>
+						<f:facet name="targetCaption"><h:outputText value="#{languageBean.cenaPersonagemSelecionado}"/></f:facet>
+
+					</p:pickList>
+					<h:outputLink id="helpPersonagens" value="#">
+						<i class="pi pi-question-circle"></i>
+					</h:outputLink>
+					<p:tooltip for="helpPersonagens"
+						value="Seleção dos personagens que participam da cena."
+						position="top" />
+
+					<p:outputLabel for="gatilhos" value="#{languageBean.cenaGatilhos}: " />
+					<p:inputTextarea id="gatilhos" rows="3" cols="50"
+						value="#{cenaBean.cena.gatilhos}" />
+					<h:outputLink id="helpGatilhos" value="#">
+						<i class="pi pi-question-circle"></i>
+					</h:outputLink>
+					<p:tooltip for="helpGatilhos"
+						value="Descrição da situação ou situações que existem na cena e que provocam desvio do fluxo normal da história (informe quais são as cenas que os gatilhos disparam)."
+						position="top" />
+
+					<p:outputLabel for="resultados" value="#{languageBean.cenaResultados}: " />
+					<p:inputTextarea id="resultados" rows="3" cols="50"
+						value="#{cenaBean.cena.resultados}" />
+					<h:outputLink id="helpResultados" value="#">
+						<i class="pi pi-question-circle"></i>
+					</h:outputLink>
+					<p:tooltip for="helpResultados"
+						value="Descrição do que se resulta da cena, o que acontece por causa dela ou a sua conclusão."
+						position="top" />
+
+					<p:link disabled="#{cenaBean.cena.id == 0}"
+						value="#{languageBean.cenaAddDialogo}" outcome="inserirDialogo">
+						<f:param name="cenaId" value="#{cenaBean.cena.id}" />
+					</p:link>
+					<h:outputText />
+					<h:outputLink id="helpDialogos" value="#">
+						<i class="pi pi-question-circle"></i>
+					</h:outputLink>
+					<p:tooltip for="helpDialogos"
+						value="Clique para adicionar um diálogo à cena." position="top" />
+				</h:panelGrid>
+			</p:fieldset>
+
+			<p:commandButton value="#{languageBean.cenaBtnGravar}" icon="pi pi-fw pi-save"
+				update="@form" process="@form" action="#{cenaBean.cadastrar}"
+				style="margin-top: 40px;" />
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

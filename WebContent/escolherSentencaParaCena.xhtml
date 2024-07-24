@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="_template.xhtml">
+	<f:metadata>
+		<f:viewAction action="#{sentencaBean.setViewName('criarCena')}" />
+		<f:viewParam name="projetoId" value="#{sentencaBean.projeto.id}" />
+		<f:viewAction action="#{sentencaBean.carregarProjetoPeloId}"
+			if="#{param.projetoId != null}" />
+	</f:metadata>
+	<ui:define name="conteudo">
+		<p:staticMessage id="semAcesso"
+			rendered="#{!sentencaBean.isAutorDoProjeto()}" severity="error"
+			detail="Você não possui acesso a este projeto!" summary="ERRO!"
+			style="margin-top: 30px; height: 30px" />
+		<p:staticMessage id="naoPodeGerarRoteiro"
+			rendered="#{!sentencaBean.podeGerarRoteiro()}" severity="error"
+			detail="As sentenças desse projeto ainda não foram geradas!"
+			summary="ERRO!" style="margin-top: 30px; height: 30px" />
+		<h:form rendered="#{sentencaBean.podeGerarRoteiro()}" id="form">
+
+			<p:breadCrumb>
+				<p:menuitem value="Meus Projetos" url="inicio.xhtml" />
+				<p:menuitem value="#{sentencaBean.projeto.nome}"
+					url="gerenciarProjeto.xhtml?projetoId=#{sentencaBean.projeto.id}" />
+				<p:menuitem value="#{languageBean.labelManage}"
+					url="gerenciarProjeto.xhtml?projetoId=#{sentencaBean.projeto.id}" />
+				<p:menuitem value="#{languageBean.menuCenas}" url="#" />
+			</p:breadCrumb>
+
+			<p:outputPanel style="margin-top: 10px;">
+				<h3><h:outputText value="#{languageBean.menuCenas}"/>:</h3>
+			</p:outputPanel>
+
+			<p:dataTable
+				rendered="#{sentencaBean.listaDeSentencasDoProjeto.size()>0}"
+				var="cena" value="#{sentencaBean.listaDeCenasDoProjeto}"
+				tableStyle="width:auto">
+				<p:column headerText="Id">
+					<h:outputText value="#{cena.ordem}" />
+				</p:column>
+				<p:column headerText="#{languageBean.labelTitulo}">
+					<h:outputText value="#{cena.titulo}" />
+				</p:column>
+				<p:column headerText="#{languageBean.sentencaClmBPMN}"
+					rendered="#{!sentencaBean.todasAsSentencasJaGeraramCenas}">
+					<h:outputText value="#{cena.sentenca.tipoDeElementoBPMN}" />
+				</p:column>
+				<p:column headerText="Status"
+					rendered="#{!sentencaBean.todasAsSentencasJaGeraramCenas}">
+					<p:outputPanel rendered="#{cena.id == 0}">
+						<i class="pi pi-fw pi-times" style="color: red;"></i>
+						<h:outputText value="Sentença" />
+					</p:outputPanel>
+					<p:outputPanel rendered="#{cena.id > 0}">
+						<i class="pi pi-fw pi-check" style="color: green;"></i>
+						<h:outputText value="Cena criada" />
+					</p:outputPanel>
+				</p:column>
+				<p:column headerText="Status"
+					rendered="#{sentencaBean.todasAsSentencasJaGeraramCenas}">
+					<p:outputPanel rendered="#{cena.sentenca == null}">
+						<i class="pi pi-fw pi-plus-circle" style="color: green;"></i>
+						<h:outputText value="Cena adicional" />
+					</p:outputPanel>
+					<p:outputPanel rendered="#{cena.sentenca.id > 0}">
+						<i class="pi pi-fw pi-check" style="color: green;"></i>
+						<h:outputText value="Cena criada" />
+					</p:outputPanel>
+				</p:column>
+				<p:column headerText="#{languageBean.cenaCriarEditarApagar}">
+					<p:button disabled="#{cena.id > 0}" outcome="comporCena"
+						icon="pi pi-fw pi-file">
+						<f:param name="sentencaId" value="#{cena.sentenca.id}" />
+					</p:button>
+					<p:button disabled="#{cena.id == 0}" outcome="comporCena"
+						icon="pi pi-fw pi-pencil">
+						<f:param name="cenaId" value="#{cena.id}" />
+					</p:button>
+					<p:commandButton disabled="#{cena.id > 0}" icon="pi pi-fw pi-trash"
+						action="#{sentencaBean.descartarSentenca(cena.sentenca.id, cena.ordem)}">
+						<p:confirm header="#{languageBean.cenaConfirmacao}"
+							message="#{languageBean.cenaMsgConfirmacao}"
+							icon="pi pi-exclamation-triangle" />
+					</p:commandButton>
+				</p:column>
+				<p:column headerText="#{languageBean.cenaAdicional}"
+					rendered="#{sentencaBean.todasAsSentencasJaGeraramCenas}">
+					<p:commandButton disabled="#{cena.id == 0}"
+						icon="pi pi-fw pi-arrow-up" value="#{languageBean.cenaBtnAntes}"
+						action="#{sentencaBean.criarCenaAdicional(false, cena.id)}">
+					</p:commandButton>
+					<p:commandButton disabled="#{cena.id == 0}"
+						icon="pi pi-fw pi-arrow-down" value="#{languageBean.cenaBtnDepois}"
+						action="#{sentencaBean.criarCenaAdicional(true, cena.id)}">
+						<f:param name="cenaAnteriorId" value="#{cena.id}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton value="#{languageBean.labelSim}" type="button"
+					styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+				<p:commandButton value="#{languageBean.labelNao}" type="button"
+					styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+			</p:confirmDialog>
+
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

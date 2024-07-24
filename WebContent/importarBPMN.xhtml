@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="_template.xhtml">
+	<f:metadata>
+		<f:viewAction action="#{sentencaBean.setViewName('importarBPMN')}" />
+		<f:viewParam name="projetoId" value="#{sentencaBean.projeto.id}" />
+		<f:viewAction action="#{sentencaBean.carregarProjetoPeloId}"
+			if="#{param.projetoId != null}" />
+	</f:metadata>
+	<ui:define name="conteudo">
+		<p:staticMessage id="semAcesso"
+			rendered="#{!sentencaBean.isAutorDoProjeto()}" severity="error"
+			detail="Você não possui acesso a este projeto!" summary="ERRO!"
+			style="margin-top: 30px; height: 30px" />
+		<h:form rendered="#{sentencaBean.isAutorDoProjeto()}"
+			enctype="multipart/form-data" id="form">
+			<p:breadCrumb>
+				<p:menuitem value="Meus Projetos" url="inicio.xhtml" />
+				<p:menuitem value="#{sentencaBean.projeto.nome}"
+					url="gerenciarProjeto.xhtml?projetoId=#{sentencaBean.projeto.id}" />
+				<p:menuitem value="#{languageBean.labelManage}"
+					url="gerenciarProjeto.xhtml?projetoId=#{sentencaBean.projeto.id}" />
+				<p:menuitem value="#{languageBean.menuBPMN}" url="#" />
+			</p:breadCrumb>
+			<p:outputPanel>
+				<h3>
+					<h:outputText value="#{languageBean.menuBPMN}" /> ::&nbsp;
+					<h:outputText value="#{sentencaBean.projeto.nome}" />
+				</h3>
+			</p:outputPanel>
+			<p:staticMessage severity="info" summary="#{languageBean.labelDica}"
+				detail="#{languageBean.labelDicaBPMN}"
+				style="margin-bottom: 20px;" />
+			<p:messages showDetail="true" closable="true" />
+			<p:fieldset legend="#{languageBean.captionBPMN}">
+				<p:fileUpload value="#{sentencaBean.arquivoBpmn}" mode="simple"
+					skinSimple="true" label="#{languageBean.labelBtnSelecionar}" />
+				<p:inputText value="#{sentencaBean.arquivo.conteudoXml}"
+					type="hidden" styleClass="conteudoXml" />
+				<p:inputText value="#{sentencaBean.sentenca.elementoBpmnId}"
+					type="hidden" styleClass="elementId" />
+				<p:remoteCommand name="onChangeSelectedElement"
+					actionListener="#{sentencaBean.carregarSentencaPeloElementoBpmn}"
+					style="display: none;" />
+				<br />
+				<p:commandButton value="#{languageBean.labelEnviar}" ajax="false"
+					action="#{sentencaBean.uploadBPMN()}"
+					rendered="#{sentencaBean.listaDeSentencasDoProjeto.size()==0}" />
+				<p:commandButton value="#{languageBean.labelEnviar}" type="button"
+					onclick="PF('confirmacao').show();"
+					rendered="#{sentencaBean.listaDeSentencasDoProjeto.size()>0}" />
+				<p:dialog header="#{languageBean.labelConfirmacao}" showEffect="fade" hideEffect="fade"
+					widgetVar="confirmacao" modal="true" width="400">
+					<p:outputPanel>
+						<h4><h:outputText value="#{languageBean.bpmnPerguntaConfirmacao}" /></h4>
+						<p><h:outputText value="#{languageBean.bpmnMsgConfirmacao}" /></p>
+					</p:outputPanel>
+					<h:panelGrid columns="2"
+						style="width: 100%; text-align: center; padding-top: 10px;">
+						<p:commandButton value="#{languageBean.labelSim}" icon="pi pi-check" ajax="false"
+							action="#{sentencaBean.uploadBPMN()}" />
+						<p:commandButton value="#{languageBean.labelNao}" type="button" icon="pi pi-times"
+							onclick="PF('confirmacao').hide();" />
+					</h:panelGrid>
+				</p:dialog>
+
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+					<p:commandButton value="#{languageBean.labelSim}" icon="pi pi-check"
+						styleClass="ui-confirmdialog-yes" ajax="false"
+						action="#{sentencaBean.uploadBPMN()}" />
+					<p:commandButton value="#{languageBean.labelNao}" type="button" icon="pi pi-times"
+						styleClass="ui-confirmdialog-no" />
+				</p:confirmDialog>
+
+				<p:dialog id="modalDetalhesElementoBpmn"
+					header="#{languageBean.bpmnDetalhesElemento} - #{sentencaBean.sentenca.tipoDeElementoBPMN}"
+					modal="true" widgetVar="modalDetalhesElementoBpmn">
+
+					<p:fieldset legend="#{languageBean.menuSentencas}">
+						<h:panelGrid columns="2">
+							<h:outputText value="#{languageBean.bpmnSentencaCompleta}: "
+								style="font-weight: bold;" />
+							<h:outputText
+								value="#{sentencaBean.sentenca.getSentencaCompleta()}" />
+						</h:panelGrid>
+					</p:fieldset>
+
+					<p:fieldset legend="#{languageBean.menuCenas}">
+						<h:outputText rendered="#{sentencaBean.sentenca.naoVaiTerCena}"
+							value="Não terá cena!" style="color: red;" />
+
+						<h:panelGrid columns="2"
+							rendered="#{!sentencaBean.sentenca.naoVaiTerCena}">
+
+							<h:outputText rendered="#{sentencaBean.sentenca.cena != null}"
+								style="font-weight: bold;" value="#{languageBean.labelTitulo}: " />
+							<h:outputText rendered="#{sentencaBean.sentenca.cena != null}"
+								value="#{sentencaBean.sentenca.cena.titulo}" />
+
+							<h:outputText rendered="#{sentencaBean.sentenca.cena != null}"
+								style="font-weight: bold;" value="#{languageBean.labelDescricaoCurta}: " />
+							<h:outputText rendered="#{sentencaBean.sentenca.cena != null}"
+								value="#{sentencaBean.sentenca.cena.descricaoBreve}" />
+
+							<h:outputText rendered="#{sentencaBean.personagens.size() > 0}"
+								style="font-weight: bold;" value="#{languageBean.labelPersonagens}: " />
+							<p:dataList value="#{sentencaBean.personagens}" var="personagem"
+								rendered="#{sentencaBean.personagens.size() > 0}">
+								#{personagem.nome} (#{personagem.funcao})
+							</p:dataList>
+							<p:link outcome="comporCena" value="#{languageBean.btnEditarCena}">
+								<f:param name="cenaId" value="#{sentencaBean.sentenca.cena.id}" />
+							</p:link>
+
+						</h:panelGrid>
+					</p:fieldset>
+
+				</p:dialog>
+			</p:fieldset>
+		</h:form>
+		<!-- element to draw bpmn diagram in -->
+		<div id="viewerBpmn">
+			<div class="well" style="height: 600px" id="canvas"></div>
+		</div>
+		<br />
+
+		<script>
+			$(document).ready(function() {
+				if ($('.conteudoXml').val().length > 0) {
+					carregarBpmn($('.conteudoXml').val());
+				}
+			});
+			function carregarBpmn(xml) {
+				// Crio a instância do componente de visualização de BPMN
+				var BpmnNavigatedViewer = window.BpmnJS;
+				var bpmnViewer = new BpmnNavigatedViewer({
+					//Coloco o elemento CANVAS responsável por exibir o diagrama BPMN
+					container : '#canvas'
+				});
+
+				//Importo o BPMN - lembrando que é a estrutura mesmo do arquivo e não o caminho
+				bpmnViewer.importXML(xml, function(err) {
+					if (err) {
+						alert('It was not possible to import BPMN 2.0 diagram',
+								err);
+					} else {
+						//Carrega o bpmn para dentro do elemento canvas
+						var canvas = bpmnViewer.get('canvas');
+						//Colcar o diagrama de acordo com o tamanho da tela e do elemento canvas.
+						canvas.zoom('fit-viewport');
+					}
+				});
+			}
+		</script>
+	</ui:define>
+</ui:composition>
+</html>

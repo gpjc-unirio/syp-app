@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="_template.xhtml">
+	<f:metadata>
+		<f:viewParam name="projetoId" value="#{projetoBean.projeto.id}" />
+		<f:viewAction action="#{projetoBean.carregarProjetoPeloId}"
+			if="#{param.projetoId != null}" />
+	</f:metadata>
+	<ui:define name="conteudo">
+		<p:staticMessage id="semAcesso"
+			rendered="#{!projetoBean.isAutorDoProjeto()}" severity="error"
+			detail="Você não possui acesso a este projeto!" summary="ERRO!"
+			style="margin-top: 30px; height: 30px" />
+		<h:form rendered="#{projetoBean.isAutorEGerenciaComSuporte()}">
+			<p:breadCrumb>
+				<p:menuitem value="Meus Projetos" url="inicio.xhtml" />
+				<p:menuitem value="#{projetoBean.projeto.nome}" url="#" />
+				<p:menuitem value="#{languageBean.labelManage}" url="#" />
+			</p:breadCrumb>
+			<p:outputPanel>
+				<h3>
+					<h:outputText value="#{languageBean.labelManage}" /> ::
+					<h:outputText value="#{projetoBean.projeto.nome}" />
+				</h3>
+			</p:outputPanel>
+			<p:outputPanel style="margin-bottom: 20px">
+				<h:outputText value="Status: " />
+				<h:outputText value="#{projetoBean.projeto.status}"
+					style="font-weight: bold; color: red;" />
+			</p:outputPanel>
+			<p:panelGrid layout="grid" columns="3" rows="3">
+
+				<f:facet name="header">Menu</f:facet>
+
+				<p:panel style="text-align:center">
+					<h:panelGrid columns="1" style="width:100%">
+						<p:link
+							href="importarBPMN.xhtml?projetoId=#{projetoBean.projeto.id}">
+							<i class="pi pi-fw pi-upload" style="font-size: 3em"></i>
+							<br />
+							<h:outputText value="#{languageBean.menuBPMN}" />
+						</p:link>
+					</h:panelGrid>
+				</p:panel>
+
+				<p:panel style="text-align:center">
+					<h:panelGrid columns="1" style="width:100%">
+						<p:link disabled="#{!projetoBean.podeGerarRoteiro()}"
+							href="ajustarSentencas.xhtml?projetoId=#{projetoBean.projeto.id}">
+							<i class="pi pi-fw pi-pencil" style="font-size: 3em"></i>
+							<br />
+							<h:outputText value="#{languageBean.menuSentencas}" />
+						</p:link>
+					</h:panelGrid>
+				</p:panel>
+
+				<p:panel style="text-align:center">
+					<h:panelGrid columns="1" style="width:100%">
+						<p:link
+							href="adicionarAutor.xhtml?projetoId=#{projetoBean.projeto.id}">
+							<i class="pi pi-fw pi-users" style="font-size: 3em"></i>
+							<br />
+							<h:outputText value="#{languageBean.menuAutores}" />
+						</p:link>
+					</h:panelGrid>
+				</p:panel>
+
+				<p:panel style="text-align:center">
+					<h:panelGrid columns="1" style="width:100%">
+						<p:link disabled="#{!projetoBean.podeGerarRoteiro()}"
+							href="cadastrarPersonagem.xhtml?projetoId=#{projetoBean.projeto.id}">
+							<i class="pi pi-fw pi-user-edit" style="font-size: 3em"></i>
+							<br />
+							<h:outputText value="#{languageBean.menuPersonagens}" />
+						</p:link>
+					</h:panelGrid>
+				</p:panel>
+
+				<p:panel style="text-align:center">
+					<h:panelGrid columns="1" style="width:100%">
+						<p:link disabled="#{!projetoBean.podeGerarRoteiro()}"
+							href="escolherSentencaParaCena.xhtml?projetoId=#{projetoBean.projeto.id}">
+							<i class="pi pi-fw pi-id-card" style="font-size: 3em"></i>
+							<br />
+							<h:outputText value="#{languageBean.menuCenas}" />
+						</p:link>
+					</h:panelGrid>
+				</p:panel>
+
+				<p:panel style="text-align:center">
+					<h:panelGrid columns="1" style="width:100%">
+						<p:link disabled="#{!projetoBean.podeGerarRoteiro()}"
+							href="gerarRoteiro.xhtml?projetoId=#{projetoBean.projeto.id}">
+							<i class="pi pi-fw pi-file-o" style="font-size: 3em"></i>
+							<br />
+							<h:outputText value="#{languageBean.menuRoteiro}" />
+						</p:link>
+					</h:panelGrid>
+				</p:panel>
+
+			</p:panelGrid>
+		</h:form>
+
+		<h:form rendered="#{projetoBean.isAutorEGerenciaSemSuporte()}">
+			<p:breadCrumb>
+				<p:menuitem value="Meus Projetos" url="inicio.xhtml" />
+				<p:menuitem value="#{projetoBean.projeto.nome}" url="#" />
+				<p:menuitem value="Gerenciar Projeto" url="#" />
+			</p:breadCrumb>
+			<p:outputPanel>
+				<h3>
+					Gerenciar Projeto ::
+					<h:outputText value="#{projetoBean.projeto.nome}" />
+				</h3>
+			</p:outputPanel>
+			<p:outputPanel style="margin-bottom: 20px">
+				<h:outputText value="Status: " />
+				<h:outputText value="#{projetoBean.projeto.status}"
+					style="font-weight: bold; color: red;" />
+			</p:outputPanel>
+			<p:panelGrid layout="grid" columns="3" rows="3">
+
+				<f:facet name="header">Menu</f:facet>
+
+				<p:panel style="text-align:center">
+					<h:panelGrid columns="1" style="width:100%">
+						<p:link
+							href="importarBPMN.xhtml?projetoId=#{projetoBean.projeto.id}">
+							<i class="pi pi-fw pi-upload" style="font-size: 3em"></i>
+							<br />
+							<h:outputText value="Diagrama BPMN" />
+						</p:link>
+					</h:panelGrid>
+				</p:panel>
+
+				<p:panel style="text-align:center">
+					<h:panelGrid columns="1" style="width:100%">
+						<p:link
+							href="registrarRoteiro.xhtml?projetoId=#{projetoBean.projeto.id}">
+							<i class="pi pi-fw pi-pencil" style="font-size: 3em"></i>
+							<br />
+							<h:outputText value="Roteiro" />
+						</p:link>
+					</h:panelGrid>
+				</p:panel>
+
+				<p:panel style="text-align:center">
+					<h:panelGrid columns="1" style="width:100%">
+						<p:link
+							href="visualizarRoteiroManual.xhtml?projetoId=#{projetoBean.projeto.id}">
+							<i class="pi pi-fw pi-file-o" style="font-size: 3em"></i>
+							<br />
+							<h:outputText value="Impressão do Roteiro" />
+						</p:link>
+					</h:panelGrid>
+				</p:panel>
+
+			</p:panelGrid>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

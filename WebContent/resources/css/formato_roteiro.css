@@ -1,0 +1,73 @@
+.roteiro {
+	font-family: 'Courier New', Courier, monospace;
+	font-size: 12pt;
+	width: 15.5cm;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 2.5cm;
+	margin-bottom: 2.5cm;
+}
+
+.capa {
+	margin-top: 8cm;
+	text-align: center;
+	display: none;
+}
+
+@media print {
+	.capa {
+		margin-top: 8cm;
+		text-align: center;
+		display: block;
+	}
+}
+
+.ato {
+	text-decoration: underline;
+	text-align: center;
+	text-transform: uppercase;
+	page-break-before: always;
+	margin-bottom: 12pt;
+}
+
+.cena-titulo {
+	background-color: #D0CECE;
+	text-transform: uppercase;
+	margin-bottom: 12pt;
+}
+
+.cena-numero {
+	float: left;
+	text-indent: -1.5cm;
+}
+
+.acao {
+	margin-bottom: 12pt;
+}
+
+.personagem {
+	padding-left: 19ch;
+	text-transform: uppercase;
+}
+
+.dialogo {
+	padding-left: 9ch;
+	padding-right: 13ch;
+	margin-bottom: 12pt;
+}
+
+.tomada {
+	margin-bottom: 12pt;
+	text-transform: uppercase;
+}
+
+.transicao {
+	margin-bottom: 12pt;
+	text-transform: uppercase;
+	text-align: right;
+}
+
+.parenteses {
+	padding-left: 9ch;
+	padding-right: 13ch;
+}

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="_template.xhtml">
+	<f:metadata>
+		<f:viewParam name="projetoId" value="#{autorBean.projeto.id}" />
+		<f:viewAction action="#{autorBean.carregarProjetoPeloId}"
+			if="#{param.projetoId != null}" />
+	</f:metadata>
+	<ui:define name="conteudo">
+		<p:staticMessage id="semAcesso"
+			rendered="#{!autorBean.isAutorDoProjeto()}" severity="error"
+			detail="Você não possui acesso a este projeto!" summary="ERRO!"
+			style="margin-top: 30px; height: 30px" />
+		<h:form rendered="#{autorBean.isAutorDoProjeto()}">
+			<p:breadCrumb>
+				<p:menuitem value="Meus Projetos" url="inicio.xhtml" />
+				<p:menuitem value="#{autorBean.projeto.nome}"
+					url="gerenciarProjeto.xhtml?projetoId=#{autorBean.projeto.id}" />
+				<p:menuitem value="#{languageBean.labelManage}"
+					url="gerenciarProjeto.xhtml?projetoId=#{autorBean.projeto.id}" />
+				<p:menuitem value="#{languageBean.authorLblAdicionar}" url="#" />
+			</p:breadCrumb>
+			<p:outputPanel>
+				<h3>
+					<h:outputText value="#{languageBean.authorLblAdicionar}" /> ::
+					<h:outputText value="#{autorBean.projeto.nome}" />
+				</h3>
+			</p:outputPanel>
+			<p:dataList value="#{autorBean.autoresDoProjeto}" var="autor"
+				style="margin-bottom: 10px">
+				<f:facet name="header"><h:outputText value="#{languageBean.authorClmAutores}" /></f:facet>
+				<h:outputText value="${autor.nomeUsuario}" /> - 
+					<h:outputText value="${autor.emailUsuario}" />
+			</p:dataList>
+			<p:outputLabel value="E-mail: " for="email" />
+			<p:inputText id="email" value="#{autorBean.autorNovo.emailUsuario}"
+				required="true" size="40"
+				requiredMessage="Preenchimento obrigatório"
+				validatorMessage="Formato inválido">
+				<f:attribute name="type" value="email" />
+				<f:passThroughAttribute name="placeholder" value="Email" />
+				<f:validateRegex pattern=".+@.+" />
+				<f:ajax event="blur" render="messages" />
+			</p:inputText>
+			<p:commandButton value="#{languageBean.authorBtnAdicionar}" icon="pi pi-fw pi-user-plus"
+				action="#{autorBean.adicionarAutor}" />
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

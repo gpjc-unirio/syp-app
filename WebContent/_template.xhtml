@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title><h:outputText value="#{languageBean.titulo}" /></title>	
+
+	<!-- Icons -->
+	<link rel="apple-touch-icon" sizes="180x180"
+		href="resources/icon/apple-touch-icon.png" />
+	<link rel="icon" type="image/png" sizes="32x32"
+		href="resources/icon/favicon-32x32.png" />
+	<link rel="icon" type="image/png" sizes="16x16"
+		href="resources/icon/favicon-16x16.png" />
+	<link rel="manifest" href="resources/icon/site.webmanifest" />
+
+	<!--CSS para os diagramas do BPMN.JS-->
+	<link rel="stylesheet"
+		href="resources/scripts/bpmn-js/dist/assets/diagram-js.css" />
+	<link rel="stylesheet"
+		href="resources/scripts/bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css" />
+
+	<script src="resources/scripts/bpmn-js/dist/bpmn-navigated-viewer.js"></script>
+</h:head>
+<h:body>
+	<h:outputStylesheet name="primeicons/primeicons.css"
+		library="primefaces" />
+	<h:outputStylesheet name="style.css" library="css" />
+	<div id="cabecalho">
+		<h:panelGrid columns="2">
+			<h:graphicImage library="img" name="syp.png" height="75%" width="75%"
+				style="margin-bottom: 10px" />
+			<p:outputPanel style="font-style: italic">
+				<h2><h:outputText value="#{languageBean.titulo}" /></h2>
+			</p:outputPanel>
+		</h:panelGrid>
+		<h:form rendered="#{usuarioLogado != null}">
+			<p:menubar>
+				<p:menuitem value="#{languageBean.menuArquivo}" icon="pi pi-fw pi-home"
+					action="inicio?faces-redirect=true" update="@none"/>
+				<p:menuitem value="#{languageBean.menuNovoProjeto}" icon="pi pi-fw pi-file"
+					action="novoProjeto?faces-redirect=true" />
+				<p:submenu label="#{languageBean.menuAdministration}"
+					rendered="#{usuarioLogado.isUsuarioAdministrador()}"
+					icon="pi pi-fw pi-user">
+					<p:menuitem value="#{languageBean.menuNovoUsuario}"
+						action="novoUsuario?faces-redirect=true" />
+					<p:menuitem value="#{languageBean.menuAlterarUsuario}"
+						action="modificarUsuario?faces-redirect=true" />
+				</p:submenu>
+				<p:submenu label="#{languageBean.menuIdioma}"					
+					icon="pi pi-fw pi-globe">
+					<p:menuitem value="#{languageBean.menuPortugues}"
+						action="#{languageBean.mudarIdioma(1)}" />
+					<p:menuitem value="#{languageBean.menuIngles}"
+						action="#{languageBean.mudarIdioma(2)}" />
+				</p:submenu>
+				<p:menuitem value="#{languageBean.menuAjuda}" icon="pi pi-fw pi-question-circle"
+					rendered="#{!usuarioLogado.isUsuarioSemSuporte()}"
+					url="ajuda.xhtml?topico=introducao" target="_blank" ajax="false" />
+				<p:menuitem value="#{languageBean.menuSobre}" icon="pi pi-info-circle" url="sobre.xhtml"
+					ajax="false" />
+
+				<f:facet name="options">
+					<p:commandButton value="Logout" icon="pi pi-fw pi-sign-out"
+						action="#{loginBean.deslogar}"
+						style="background: #212529; color: #e9ecef;" />
+				</f:facet>
+			</p:menubar>
+		</h:form>
+		<p:growl id="messages" showDetail="true" autoUpdate="true" />
+	</div>
+	<div id="conteudo">
+		<ui:insert name="conteudo">
+		</ui:insert>
+	</div>
+	<div id="rodape">
+		<p:outputPanel style="margin-bottom: 50px">
+			<p>Copyright &copy;2022 JoCCom - <h:outputText value="#{languageBean.labelJoccon}" /></p>
+			<p><h:outputText value="#{languageBean.labelUnirio}" /></p>
+			<p><h:outputText value="#{languageBean.labelPpgi}" /></p>
+			<p>Versão 0.01</p>
+		</p:outputPanel>
+	</div>
+</h:body>
+</html>

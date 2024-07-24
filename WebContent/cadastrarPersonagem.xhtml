@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="_template.xhtml">
+	<f:metadata>
+		<f:viewParam name="projetoId" value="#{personagemBean.projeto.id}" />
+		<f:viewAction action="#{personagemBean.carregarProjetoPeloId}"
+			if="#{param.projetoId != null}" />
+
+		<f:viewParam name="personagemId"
+			value="#{personagemBean.personagem.id}" />
+		<f:viewAction action="#{personagemBean.carregarPersonagemPeloId}"
+			if="#{param.personagemId != null}" />
+	</f:metadata>
+	<ui:define name="conteudo">
+		<p:staticMessage id="semAcesso"
+			rendered="#{!personagemBean.isAutorDoProjeto()}" severity="error"
+			detail="Você não possui acesso a este projeto!" summary="ERRO!"
+			style="margin-top: 30px; height: 30px" />
+		<h:form rendered="#{personagemBean.isAutorDoProjeto()}">
+			<p:breadCrumb>
+				<p:menuitem value="Meus Projetos" url="inicio.xhtml" />
+				<p:menuitem value="#{personagemBean.projeto.nome}"
+					url="gerenciarProjeto.xhtml?projetoId=#{personagemBean.projeto.id}" />
+				<p:menuitem value="#{languageBean.labelManage}"
+					url="gerenciarProjeto.xhtml?projetoId=#{personagemBean.projeto.id}" />
+				<p:menuitem value="#{languageBean.personagemCadastrar}" url="#" />
+			</p:breadCrumb>
+			<p:outputPanel rendered="#{param.personagemId == null}">
+				<h3>
+					<h:outputText value="#{languageBean.personagemCadastrar}"/> ::
+					<h:outputText value="#{personagemBean.projeto.nome}" />
+				</h3>
+			</p:outputPanel>
+			<p:outputPanel rendered="#{param.personagemId != null}">
+				<h3>
+					<h:outputText value="#{languageBean.personagemEditar}"/> - 
+					<h:outputText value="#{personagemBean.personagem.nome}" /> ::
+					<h:outputText value="#{personagemBean.projeto.nome}" />
+				</h3>
+			</p:outputPanel>
+
+			<p:carousel value="#{personagemBean.personagensDoProjeto}"
+				headerText="#{languageBean.personagemCasdastrados}" var="p"
+				itemStyle="text-align: center" responsive="true">
+
+				<p:panelGrid columns="1" style="width: 100%; margin: 10px 0px"
+					columnClasses="label,value" layout="grid">
+
+					<f:facet name="header">
+						<h:outputText value="#{p.nome}" />
+					</f:facet>
+					<h:outputText value="#{p.funcao}" />
+					<p:link outcome="cadastrarPersonagem" value="#{languageBean.personagemBtnEditar}"
+						style="text-align: center">
+						<f:param name="projetoId" value="#{personagemBean.projeto.id}" />
+						<f:param name="personagemId" value="#{p.id}" />
+					</p:link>
+
+				</p:panelGrid>
+
+			</p:carousel>
+
+			<p:outputPanel>
+				<h3>
+					<h:outputText rendered="#{param.personagemId != null}"
+						value="#{languageBean.personagemLblEditando}" style="color: red" />
+				</h3>
+			</p:outputPanel>
+
+			<h:panelGrid columns="5" style="margin-top: 40px">
+
+				<p:outputLabel value="#{languageBean.personagemNome}: " for="nome" />
+				<p:inputText id="nome" value="#{personagemBean.personagem.nome}"
+					required="true" size="40"
+					requiredMessage="Preenchimento obrigatório">
+					<f:ajax event="blur" render="messageNome" />
+				</p:inputText>
+				<h:outputLink id="helpNome" value="#">
+					<i class="pi pi-question-circle"></i>
+				</h:outputLink>
+				<p:tooltip for="helpNome" value="Nome próprio do personagem"
+					position="top" />
+				<p:message for="nome" id="messageNome" />
+
+				<p:outputLabel value="#{languageBean.personagemFuncao}: " for="funcao" />
+				<p:selectOneMenu id="funcao"
+					value="#{personagemBean.personagem.funcao}" required="true"
+					requiredMessage="Preenchimento obrigatório"
+					validatorMessage="Escolha uma opção">
+					<f:validateLength minimum="2" />
+					<f:selectItem itemLabel="Sem relação com o processo"
+						itemValue="Sem relação com o processo" />
+					<f:selectItems value="#{personagemBean.sujeitos}" />
+					<f:ajax event="blur" render="messageFuncao" />
+				</p:selectOneMenu>
+				<h:outputLink id="helpFuncao" value="#">
+					<i class="pi pi-question-circle"></i>
+				</h:outputLink>
+				<p:tooltip for="helpFuncao"
+					value="Função do personagem dentro da história, considerando as existentes no processo de negócio"
+					position="top" />
+				<p:message for="funcao" id="messageFuncao" />
+
+				<p:outputLabel value="#{languageBean.personagemArquetipo}: " for="arquetipo" />
+				<p:selectOneMenu id="arquetipo"
+					value="#{personagemBean.personagem.arquetipo}" required="true"
+					requiredMessage="Preenchimento obrigatório"
+					validatorMessage="Escolha uma opção">
+					<f:validateLength minimum="2" />
+					<f:selectItem itemLabel="---" itemValue="" />
+					<f:selectItems value="#{personagemBean.arquetipos}" />
+					<f:ajax event="blur" render="messageArquetipo" />
+				</p:selectOneMenu>
+				<p:lightBox>
+					<h:outputLink id="helpArquetipo"
+						value="resources/img/arquetipos.png">
+						<i class="pi pi-question-circle"></i>
+					</h:outputLink>
+				</p:lightBox>
+				<p:tooltip for="helpArquetipo"
+					value="Arquétipo que melhor representa o personagem. Clique para detalhes!"
+					position="top" />
+				<p:message for="arquetipo" id="messageArquetipo" />
+
+				<p:outputLabel value="#{languageBean.personagemPhysic}: "
+					for="caracteristicasFisicas" />
+				<p:inputTextarea id="caracteristicasFisicas"
+					value="#{personagemBean.personagem.caracteristicasFisicas}"
+					validatorMessage="Máximo 3096 caracteres" rows="10" cols="50">
+					<f:validateLength maximum="3096" />
+					<f:ajax event="blur" render="messageCaracteristicasFisicas" />
+				</p:inputTextarea>
+				<h:outputLink id="helpCaracteristicasFisicas" value="#">
+					<i class="pi pi-question-circle"></i>
+				</h:outputLink>
+				<p:tooltip for="helpCaracteristicasFisicas"
+					value="Descrição das caracaterísticas físicas do personagem (sexo, altura, idade, etnia, etc.)"
+					position="top" />
+				<p:message for="caracteristicasFisicas"
+					id="messageCaracteristicasFisicas" />
+
+				<p:outputLabel value="#{languageBean.personagemPhysico}: "
+					for="caracteristicasPsicologicas" />
+				<p:inputTextarea id="caracteristicasPsicologicas"
+					value="#{personagemBean.personagem.caracteristicasPsicologicas}"
+					validatorMessage="Máximo 3096 caracteres" rows="10" cols="50">
+					<f:validateLength maximum="3096" />
+					<f:ajax event="blur" render="messageCaracteristicasPsicologicas" />
+				</p:inputTextarea>
+				<h:outputLink id="helpCaracteristicasPsicologicas" value="#">
+					<i class="pi pi-question-circle"></i>
+				</h:outputLink>
+				<p:tooltip for="helpCaracteristicasPsicologicas"
+					value="Descrição das características psicológicas do personagem (habilidades, temperamento, gostos, etc.)"
+					position="top" />
+				<p:message for="caracteristicasPsicologicas"
+					id="messageCaracteristicasPsicologicas" />
+
+				<p:outputLabel value="#{languageBean.personagemObjetivo}: " for="objetivo" />
+				<p:inputTextarea id="objetivo"
+					value="#{personagemBean.personagem.objetivo}"
+					validatorMessage="Máximo 3096 caracteres" rows="10" cols="50">
+					<f:validateLength maximum="3096" />
+					<f:ajax event="blur" render="messageObjetivo" />
+				</p:inputTextarea>
+				<h:outputLink id="helpObjetivo" value="#">
+					<i class="pi pi-question-circle"></i>
+				</h:outputLink>
+				<p:tooltip for="helpObjetivo"
+					value="Objetivo do personagem na história." position="top" />
+				<p:message for="objetivo" id="messageObjetivo" />
+
+				<p:outputLabel value="#{languageBean.personagemBio}: " for="biografia" />
+				<p:inputTextarea id="biografia"
+					value="#{personagemBean.personagem.biografia}"
+					validatorMessage="Máximo 3096 caracteres" rows="10" cols="50">
+					<f:validateLength maximum="3096" />
+					<f:ajax event="blur" render="messageBiografia" />
+				</p:inputTextarea>
+				<h:outputLink id="helpBiografia" value="#">
+					<i class="pi pi-question-circle"></i>
+				</h:outputLink>
+				<p:tooltip for="helpBiografia"
+					value="História do personagem até o início da história."
+					position="top" />
+				<p:message for="biografia" id="messageBiografia" />
+
+				<p:outputLabel value="#{languageBean.personagemJornada}: " for="jornada" />
+				<p:inputTextarea id="jornada"
+					value="#{personagemBean.personagem.jornada}"
+					validatorMessage="Máximo 3096 caracteres" rows="10" cols="50">
+					<f:validateLength maximum="3096" />
+					<f:ajax event="blur" render="messageJornada" />
+				</p:inputTextarea>
+				<h:outputLink id="helpJornada" value="#">
+					<i class="pi pi-question-circle"></i>
+				</h:outputLink>
+				<p:tooltip for="helpJornada"
+					value="Como se desenrola a história do personagem ao longo do jogo."
+					position="top" />
+				<p:message for="jornada" id="messageJornada" />
+
+			</h:panelGrid>
+
+			<p:commandButton value="#{languageBean.personagemBtnGravar}" icon="pi pi-fw pi-user-plus"
+				update="@form" process="@form" action="#{personagemBean.registrar}"
+				style="margin-top: 40px;" />
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

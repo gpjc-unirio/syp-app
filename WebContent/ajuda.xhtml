@@ -1,0 +1,795 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="_template-basic.xhtml">
+	<f:metadata>
+		<f:viewParam name="topico" />
+	</f:metadata>
+	<ui:define name="menu">
+		<h:form rendered="true">
+			<p:panelMenu stateful="false" style="padding-top: 20px;">
+				<p:submenu label="Introdução"
+					expanded="#{param.topico.equals('introducao')}"
+					style="text-decoration: none;">
+					<p:menuitem value="Objetivo geral"
+						url="ajuda.xhtml?topico=introducao#objetivoGeral" />
+					<p:menuitem value="Organização da Aplicação"
+						url="ajuda.xhtml?topico=introducao#organizacaoDaAplicacao" />
+				</p:submenu>
+				<p:submenu label="Projeto"
+					expanded="#{param.topico.equals('projeto')}">
+					<p:menuitem value="Cadastrar projeto"
+						url="ajuda.xhtml?topico=projeto#cadastrarProjeto" />
+					<p:menuitem value="Gerenciar projeto"
+						url="ajuda.xhtml?topico=projeto#gerenciarProjeto" />
+					<p:menuitem value="Adicionar autores"
+						url="ajuda.xhtml?topico=projeto#adicionarAutores" />
+				</p:submenu>
+				<p:submenu label="Diagrama BPMN"
+					expanded="#{param.topico.equals('diagramaBpmn')}">
+					<p:menuitem value="Importar diagrama"
+						url="ajuda.xhtml?topico=diagramaBpmn#importarDiagrama" />
+					<p:menuitem value="Interagir com os elementos"
+						url="ajuda.xhtml?topico=diagramaBpmn#interagirComOsElementos" />
+				</p:submenu>
+				<p:submenu label="Sentenças"
+					expanded="#{param.topico.equals('sentencas')}">
+					<p:menuitem value="Gerar sentenças"
+						url="ajuda.xhtml?topico=sentencas#gerarSentencas" />
+					<p:menuitem value="Ajustar sentença"
+						url="ajuda.xhtml?topico=sentencas#ajustarSentenca" />
+				</p:submenu>
+				<p:submenu label="Personagens"
+					expanded="#{param.topico.equals('personagens')}">
+					<p:menuitem value="Arquétipos da Jornada do Herói"
+						url="ajuda.xhtml?topico=personagens#arquetiposDaJornadaDoHeroi" />
+					<p:menuitem value="Cadastrar personagem"
+						url="ajuda.xhtml?topico=personagens#cadastrarPersonagem" />
+					<p:menuitem value="Editar personagem"
+						url="ajuda.xhtml?topico=personagens#editarPersonagem" />
+				</p:submenu>
+				<p:submenu label="Cenas" expanded="#{param.topico.equals('cenas')}">
+					<p:menuitem value="Regras gerais"
+						url="ajuda.xhtml?topico=cenas#regrasGerais" />
+					<p:menuitem value="Criar cena a partir de uma sentença"
+						url="ajuda.xhtml?topico=cenas#criarCenaAPartirDeUmaSentenca" />
+					<p:menuitem value="Criar cena adicional"
+						url="ajuda.xhtml?topico=cenas#criarCenaAdicional" />
+					<p:menuitem value="Modificar cena"
+						url="ajuda.xhtml?topico=cenas#modificarCena" />
+					<p:menuitem value="Descartar cena"
+						url="ajuda.xhtml?topico=cenas#descartarCena" />
+					<p:menuitem value="Adicionar diálogos"
+						url="ajuda.xhtml?topico=cenas#adicionarDialogos" />
+				</p:submenu>
+				<p:submenu label="Jornada do Herói"
+					expanded="#{param.topico.equals('jornadaDoHeroi')}">
+					<p:menuitem value="Estágios da Jornada do Herói"
+						url="ajuda.xhtml?topico=jornadaDoHeroi#estagiosDaJornadaDoHeroi" />
+					<p:menuitem value="Adicionar cena a um estágio"
+						url="ajuda.xhtml?topico=jornadaDoHeroi#adicionarCenaAUmEstagio" />
+					<p:menuitem value="Remover cena de um estágio"
+						url="ajuda.xhtml?topico=jornadaDoHeroi#removerCenaDeUmEstagio" />
+				</p:submenu>
+				<p:submenu label="Roteiro"
+					expanded="#{param.topico.equals('roteiro')}">
+					<p:menuitem value="Gerar roteiro em texto"
+						url="ajuda.xhtml?topico=roteiro#gerarRoteiroEmTexto" />
+					<p:menuitem value="Gerar roteiro em ink"
+						url="ajuda.xhtml?topico=roteiro#gerarRoteiroEmInk" />
+				</p:submenu>
+			</p:panelMenu>
+		</h:form>
+	</ui:define>
+	<ui:define name="conteudo">
+		<p:outputPanel id="introducao"
+			rendered="#{param.topico.equals('introducao')}"
+			style="margin-bottom: 100px;">
+			<h1>Introdução</h1>
+			<h3 id="objetivoGeral">Objetivo geral</h3>
+			<p>
+				O objetivo desta aplicação é dar suporte ao método SYP (<span
+					style="font-style: italic;">Scripting Your Process</span>). O
+				método SYP visa prover uma sistemática para geração de roteiros
+				narrativos para <a
+					href="https://www.sbgames.org/sbgames2019/files/papers/ArtesDesignShort/198355.pdf"
+					target="_blank">Jogos Digitais Baseados em Processos de Negócio</a>.
+				Tal sistemática parte de um diagrama na linguagem <a
+					href="https://www.bpmn.org/" target="_blank">BPMN</a>, onde dos
+				elementos de fluxo do diagrama são geradas sentenças e que
+				posteriormente geram cenas para compor o roteiro do jogo. Ou seja,
+				os elementos BPMN servem de insumos para identicar os elementos de
+				jogos e da narrativa. Na figura abaixo estão as etapas propostas
+				pelo método SYP.
+			</p>
+			<p:lightBox>
+				<h:outputLink value="resources/img/metodoSYP.png">
+					<h:graphicImage library="img" name="metodoSYP.png" height="50%"
+						width="50%" />
+				</h:outputLink>
+			</p:lightBox>
+			<p:separator />
+			<h3 id="organizacaoDaAplicacao">Organização da aplicação</h3>
+			<p>A aplicação é organizada em 7 passos para geração do roteiro
+				narrativo do jogo digital baseado em processo de negócio:</p>
+			<ol>
+				<li><strong><a href="ajuda.xhtml?topico=projeto">Projeto</a>:
+				</strong>Criação do projeto de jogo e o registro dos autores.</li>
+				<li><strong><a href="ajuda.xhtml?topico=diagramaBpmn">Diagrama
+							BPMN</a>: </strong>Importação do arquivo contendo o diagrama BPMN (extensão
+					.bpmn).</li>
+				<li><strong><a href="ajuda.xhtml?topico=sentencas">Sentenças</a>:
+				</strong>A aplicação gera automaticamente as sentenças a partir do diagrama
+					BPMN. Cabe revisá-las e ajustá-las onde necessário. Neste momento,
+					já é possível gerar uma primeira versão das escaletas.</li>
+				<li><strong><a href="ajuda.xhtml?topico=personagens">Personagens</a>:
+				</strong>Registro dos personagens do jogo.</li>
+				<li><strong><a href="ajuda.xhtml?topico=cenas">Cenas</a>:
+				</strong>Caracterização das cenas do jogo. As cenas podem ser criadas a
+					partir das sentenças já geradas ou podem ser criadas cenas
+					adicionais para complementar a história, respeitando as regras e
+					características do processo de negócio.</li>
+				<li><strong><a
+						href="ajuda.xhtml?topico=jornadaDoHeroi">Jornada do Herói</a>: </strong>Associação
+					das cenas criadas com os <a
+					href="ajuda.xhtml?topico=jornadaDoHeroi#estagiosDaJornadaDoHeroi">estágios
+						da Jornada do Herói</a>.</li>
+				<li><strong><a href="ajuda.xhtml?topico=roteiro">Roteiro</a>:
+				</strong>Exportação do roteiro em texto ou no formato <a
+					href="https://www.inklestudios.com/ink/" target="_blank">ink</a>,
+					contendo as cenas que foram elaborados para o jogo.</li>
+			</ol>
+			<p:separator />
+			<p>
+				<a href="ajuda.xhtml?topico=projeto">Projeto &#62;&#62;</a>
+			</p>
+		</p:outputPanel>
+		<p:outputPanel id="projeto"
+			rendered="#{param.topico.equals('projeto')}"
+			style="margin-bottom: 100px;">
+			<h1>Projeto</h1>
+			<h3 id="cadastrarProjeto">Cadastrar projeto</h3>
+			<p>Para cadastar um novo projeto relativo a um JDBPN (Jogo
+				Digital Baseado em Processo de Negócio), é por meio da barra de menu
+				superior, na opção [Novo Projeto]:</p>
+			<h:graphicImage library="img" name="ajuda_novo_projeto.png" />
+			<p>
+				O cadastro de um novo projeto é composto por apenas dois campos
+				obrigatórios: o <strong>nome</strong> e a <strong>descrição</strong>
+				do projeto. Após preencher os campos, basta clicar no botão
+				[Cadastrar].
+			</p>
+			<p:staticMessage severity="info" summary="DICA"
+				detail="Utilize os campos nome e descrição para caracterizar devidamente o projeto, utilizando as informações relativas ao jogo / processo de negócio. O campo [Nome do projeto], por exemplo, pode ser o nome do jogo."
+				style="margin-bottom: 20px;" />
+			<p>As informações preenchidas aparecerão na capa da versão em
+				texto do roteiro.</p>
+			<p>
+				Após o cadastro, o status do projeto será <span
+					style="font-style: italic; font-weight: bold;">Em Elaboração</span>.
+				Os status possíveis estão listados abaixo e as transições serão
+				destacadas nos próximos tópicos:
+			</p>
+			<ul>
+				<li>Em Elaboração</li>
+				<li>Pré-Roteiro</li>
+				<li>Roteiro Elaborado</li>
+				<li>Roteiro Elaborado com Jornada do Herói</li>
+			</ul>
+			<p:separator />
+			<h3 id="gerenciarProjeto">Gerenciar projeto</h3>
+			<p>Gerenciar um projeto envolve passar por todos os passos de um
+				determinado projeto. O primeiro passo é ir para a página inicial e
+				escolher um dos projeto cadastrados ao qual se possui acesso como
+				autor. O acesso é feito por meio da opção [Início] da barra de menu
+				superior da aplicação:</p>
+			<h:graphicImage library="img" name="ajuda_gerenciar_projeto.png" />
+			<p>Para escolher o projeto em que se deseja gerenciar, basta
+				clicar no botão [Gerenciar] à direita dos dados do projeto na lista
+				de projetos:</p>
+			<h:graphicImage library="img" name="ajuda_botao_gerenciar.png" />
+			<p>Será exibido um menu com todas os passos disponíveis para o
+				projeto, bastando escolher qual será a parte a ser gerenciada do
+				projeto clicando em uma das opções.</p>
+			<p>Nas próximas seções e tópicos serão detalhadas cada uma das
+				opções desse menu.</p>
+			<p:separator />
+			<h3 id="adicionarAutores">Adicionar autores</h3>
+			<p>É possível ter mais de um autor no projeto, além daquele que o
+				cadastrou. Os autores são usuários que podem gerenciar um
+				determinado projeto, isto é, podem seguir todos os passos no
+				aplicativo para a criação das cenas e do roteiro.</p>
+			<p>
+				Para cadastrar um novo autor, é necessário ser autor do projeto e ir
+				na parte de <a href="ajuda.xhtml?topico=projeto#gerenciarProjeto">Gerenciar</a>
+				o respectivo projeto. No menu de gerenciamento do projeto, basta
+				clicar na opção [Autores do projeto].
+			</p>
+			<p>Após abrir a página que permite atribuir autores ao projeto,
+				basta digitar o e-mail do usuário e clicar em [Adicionar].</p>
+			<h:graphicImage library="img" name="ajuda_adicionar_autor.png" />
+			<p:staticMessage severity="warn" summary="ATENÇÃO"
+				detail="É necessário que o e-mail do novo autor seja o mesmo cadastrado na aplicação."
+				style="margin-bottom: 20px;" />
+			<p:separator />
+			<p>
+				<a href="ajuda.xhtml?topico=introducao">&#60;&#60; Introdução</a> |
+				<a href="ajuda.xhtml?topico=diagramaBpmn">Diagrama BPMN
+					&#62;&#62;</a>
+			</p>
+		</p:outputPanel>
+		<p:outputPanel id="diagramaBpmn"
+			rendered="#{param.topico.equals('diagramaBpmn')}"
+			style="margin-bottom: 100px;">
+			<h1>Diagrama BPMN</h1>
+			<h3 id="importarDiagrama">Importar diagrama</h3>
+			<p>
+				A importação do diagrama BPMN é o passo inicial para concepção das
+				cenas do roteiro. A partir da importação do arquivo, esta aplicação
+				gera automaticamente <a href="ajuda.xhtml?topico=sentencas">sentenças</a>
+				em texto extraídas de acordo com que os elementos do diagrama se
+				apresentam.
+			</p>
+			<p>
+				O arquivo a ser importado deve estar no formato válido (extensão
+				.bpmn) e será associado a um determinado projeto. A importação é
+				feita na parte de <a
+					href="ajuda.xhtml?topico=projeto#gerenciarProjeto">Gerenciar</a> o
+				respectivo projeto. No menu de gerenciamento do projeto, basta
+				clicar na opção [Diagrama BPMN].
+			</p>
+			<p>Após abrir a página, caso algum diagrama já tenha sido
+				carregado anteriormente, ele será exibido na página.</p>
+			<p:staticMessage severity="warn" summary="ATENÇÃO"
+				detail="Caso já exista um diagrama BPMN para o projeto e seja carregado novamente, todas as setenças criadas até então serão perdidas."
+				style="margin-bottom: 20px;" />
+			<p>Para carregar o diagrama, basta primeiro clicar no botão
+				[Selecione...] para procurar pelo arquivo no computador, escolher o
+				arquivo e confirmar. Após aparecer o nome do arquivo na tela, basta
+				clicar no botão [Enviar] para submeter o arquivo para o servidor.</p>
+			<h:graphicImage library="img" name="ajuda_importar_bpmn.png" />
+			<p>Assim que o diagrama for submetido, ele será exibido na tela.</p>
+			<p:separator />
+			<h3 id="interagirComOsElementos">Interagir com os elementos</h3>
+			<p>
+				Como o diagrama BPMN é o ponto de partida para o roteiro, é possível
+				ver as <a href="ajuda.xhtml?topico=cenas">cenas</a> e <a
+					href="ajuda.xhtml?topico=sentencas">sentenças</a> que foram geradas
+				a partir de cada elemento de fluxo (eventos, atividades e <span
+					style="font-style: italic;">gateways</span>) do diagrama BPMN.
+			</p>
+			<p>
+				A interação com os elementos é na parte de <a
+					href="ajuda.xhtml?topico=projeto#gerenciarProjeto">Gerenciar</a> o
+				respectivo projeto. No menu de gerenciamento do projeto, basta
+				clicar na opção [Diagrama BPMN].
+			</p>
+			<p>Após abrir a página, será exibido o diagrama BPMN do projeto.
+				Basta clicar nos respectivos elementos para verificar o que foi
+				gerado na aplicação a partir dele, sendo sentenças e cenas.</p>
+			<p:separator />
+			<p>
+				<a href="ajuda.xhtml?topico=projeto">&#60;&#60; Projeto</a> | <a
+					href="ajuda.xhtml?topico=sentencas">Sentenças &#62;&#62;</a>
+			</p>
+		</p:outputPanel>
+		<p:outputPanel id="sentencas"
+			rendered="#{param.topico.equals('sentencas')}"
+			style="margin-bottom: 100px;">
+			<h1>Sentenças</h1>
+			<h3 id="gerarSentencas">Gerar sentenças</h3>
+			<p>
+				As sentenças em texto são geradas automaticamente assim que o <a
+					href="ajuda.xhtml?topico=diagramaBpmn">diagrama BPMN</a> é
+				importado para o projeto. Para consultar as sentenças que foram
+				geradas é na parte de <a
+					href="ajuda.xhtml?topico=projeto#gerenciarProjeto">Gerenciar</a> o
+				respectivo projeto. No menu de gerenciamento do projeto, basta
+				clicar na opção [Sentenças].
+			</p>
+			<p>Será exibida uma tabela com as setenças geradas, contendo as
+				seguintes informações:</p>
+			<ul>
+				<li><strong>Id: </strong>Um número sequencial único para cada
+					sentença.</li>
+				<li><strong>Sentença: </strong>A sentença / frase formada,
+					contendo sujeito, verbo e complementos.</li>
+				<li><strong>Tipo BPMN: </strong>Tipo de elemento BPMN relativo
+					ao elemento que gerou a sentença.</li>
+				<li><strong>Próximas: </strong>Id's das próximas sentenças,
+					conforme o fluxo do processo.</li>
+			</ul>
+			<p:separator />
+			<h3 id="ajustarSentenca">Ajustar sentença</h3>
+			<p>Ajustar uma sentença consiste em alterar uma de suas partes
+				(sujeito, verbo ou complemento), com o intuito de melhorar a que foi
+				gerada automaticamente pela aplicação.</p>
+			<p>
+				O ajuste das sentenças ocorre na mesma tela onde é feita a consulta,
+				indo na parte de <a
+					href="ajuda.xhtml?topico=projeto#gerenciarProjeto">Gerenciar</a> o
+				respectivo projeto. No menu de gerenciamento do projeto, basta
+				clicar na opção [Sentenças].
+			</p>
+			<p>Será exibida uma tabela com as setenças geradas. Para alterar
+				qualquer uma, basta clicar sobre o texto da sentença. Será exibida
+				uma janela contendo separadamente um campo de edição para cada um
+				dos componentes da sentença (sujeito, verbo e complementos). Ao
+				alterar qualquer um dos campos e posteriormente clicar em
+				[Atualizar], a sentença será modificada.</p>
+			<h:graphicImage library="img" name="ajuda_ajustar_sentenca.png" />
+			<p:separator />
+			<p>
+				<a href="ajuda.xhtml?topico=diagramaBpmn">&#60;&#60; Diagrama
+					BPMN</a> | <a href="ajuda.xhtml?topico=personagens">Personagens
+					&#62;&#62;</a>
+			</p>
+		</p:outputPanel>
+		<p:outputPanel id="personagens"
+			rendered="#{param.topico.equals('personagens')}"
+			style="margin-bottom: 100px;">
+			<h1>Personagens</h1>
+			<h3 id="arquetiposDaJornadaDoHeroi">Arquétipos da Jornada do
+				Herói*</h3>
+			<p>Os arquétipos são "tipos" de personagens que se repetem na
+				maioria das histórias. Cada um desses arquétipos representa um
+				perfil psicológico humano:</p>
+			<h:graphicImage library="img" name="ajuda_arquetipos_r.png" />
+			<ul>
+				<li><strong>Herói: </strong>É o protagonista e o personagem
+					principal da história. É o único arquétipo que deve aparecer em uma
+					história. A função principal do Herói é resolver (ou pelo menos
+					tentar resolver) o conflito principal.</li>
+				<li><strong>Arauto: </strong>Aquele que anuncia o conflito
+					principal ao Herói.</li>
+				<li><strong>Mentor: </strong>É o professor e conselheiro do
+					herói. Normalmente é mais velho do que o Herói, mais sábio e talvez
+					em uma época anterior pudesse realmente ter sido o Herói.</li>
+				<li><strong>Guardião: </strong>Ele bloqueia o progresso do
+					Herói. Frequentemente trabalhando sob a supervisão direta ou
+					indireta do Vilão, fazem muito do trabalho pesado quando se trata
+					de fornecer subconflitos para o Herói superar.</li>
+				<li><strong>Alívio: </strong>Aquele que traz comédia e leveza
+					quando a história mais precisa.</li>
+				<li><strong>Camaleão: </strong>É um personagem sobre o qual o
+					público não tem certeza em qual lado ele está, que pode trair um
+					dos lados (do herói ou do vilão) a qualquer momento.</li>
+				<li><strong>Vilão: </strong>Este é o “vilão” principal e o
+					instigador por trás do conflito principal.</li>
+			</ul>
+			<p style="font-style: italic; color: gray;">*Fonte: Skolnick,
+				Evan. Video Game Storytelling – What Every Developer Needs to Know
+				about Narrative Techniques. Watson-Guptill Publications.</p>
+			<p:separator />
+			<h3 id="cadastrarPersonagem">Cadastrar personagem</h3>
+			<p>Os personagens são elementos importantes de uma história. No
+				caso dos Jogos Digitais Baseados em Processos de Negócio, de acordo
+				com o processo, alguns personagens já são esperados e devem estar
+				implícitos no diagrama BPMN. No entanto, para contribuir com a
+				ludicidade da história, é recomendável a inclusão de outros
+				personagens.</p>
+			<p>
+				Para cadastrar um personagem, é na parte de <a
+					href="ajuda.xhtml?topico=projeto#gerenciarProjeto">Gerenciar</a> o
+				respectivo projeto. No menu de gerenciamento do projeto, basta
+				clicar na opção [Personagens]. Na página que abrir, estão os campos
+				a serem preenchidos relativos à ficha do personagem, que são:
+			</p>
+			<ul>
+				<li><strong>Nome: </strong>Nome próprio do personagem.</li>
+				<li><strong>Função: </strong>Função do personagem dentro da
+					história, considerando as existentes no processo de negócio (são
+					obtidas a partir do diagrama BPMN do processo).</li>
+				<li><strong>Arquétipo: </strong><a
+					href="#arquetiposDaJornadaDoHeroi">Arquétipo da Jornada do
+						Herói</a> que melhor representa o personagem.</li>
+				<li><strong>Características Físicas: </strong>Descrição das
+					caracaterísticas físicas do personagem (sexo, altura, idade, etnia,
+					etc.).</li>
+				<li><strong>Características Psicológicas: </strong>Descrição
+					das características psicológicas do personagem (habilidades,
+					temperamento, gostos, etc.).</li>
+				<li><strong>Objetivo: </strong>Objetivo do personagem na
+					história.</li>
+				<li><strong>Biografia: </strong>História da vida do personagem
+					até o início da história.</li>
+				<li><strong>Jornada: </strong>Como se desenrola a história do
+					personagem ao longo do jogo.</li>
+			</ul>
+			<p:staticMessage severity="info" summary="DICA"
+				detail="Os campos [Nome], [Função] e [Arquétipo] são de preenchimento obrigatório. Os demais não são, porém é recomendável o preenchimento das demais informações focando apenas no que é relevante para a história do jogo como um todo."
+				style="margin-bottom: 20px;" />
+			<p>Após preencher os campos, basta clicar no botão [Registrar]
+				para submeter o cadastro. O personagem cadastrado aparecerá no
+				painel acima do formulário, onde ficarão todos os que forem
+				cadastrados também.</p>
+			<h:graphicImage library="img" name="ajuda_botao_registrar.png" />
+			<p:separator />
+			<h3 id="editarPersonagem">Editar personagem</h3>
+			<p>
+				Sempre que necessário é possível editar a ficha do personagem,
+				alterando o preenchimento dos campos. Isso é feito na parte de <a
+					href="ajuda.xhtml?topico=projeto#gerenciarProjeto">Gerenciar</a> o
+				respectivo projeto. No menu de gerenciamento do projeto, basta
+				clicar na opção [Personagens].
+			</p>
+			<p>Na parte superior da página, aparecem um painel com todos os
+				personagens já cadastrados no projeto. Na caixa de cada personagem
+				tem o seu nome, função e um link para edição (Editar). Ao clicar
+				neste link, serão carregados os dados da ficha do personagem em cada
+				um dos campos, permitindo alterá-los. Após alterar, basta clicar no
+				botão [Registrar] para submeter as alterações.</p>
+			<h:graphicImage library="img" name="ajuda_botao_registrar.png" />
+			<p:separator />
+			<p>
+				<a href="ajuda.xhtml?topico=sentencas">&#60;&#60; Sentenças</a> | <a
+					href="ajuda.xhtml?topico=cenas">Cenas &#62;&#62;</a>
+			</p>
+		</p:outputPanel>
+		<p:outputPanel id="cenas" rendered="#{param.topico.equals('cenas')}"
+			style="margin-bottom: 100px;">
+			<h1>Cenas</h1>
+			<h3 id="regrasGerais">Regras Gerais</h3>
+			<p>As cenas são compostas por alguns atributos que ajudam a
+				defini-las. No momento da criação das cenas, os campos relativos a
+				esses atributos são disponíveis para preenchimento, que são:</p>
+			<ul>
+				<li><strong>Título: </strong>Único campo obrigatório. É um
+					título para salvar a cena que servirá para identificá-la
+					posteriormente.</li>
+				<li><strong>Descrição breve: </strong>Descrição resumida do que
+					acontece durante a cena, na sequência dos eventos.</li>
+				<li><strong>Local: </strong>Nome do local onde a cena ocorre.</li>
+				<li><strong>Tipo de local: </strong>Indicação se a cena ocorre
+					em um cenário interno ou em ambiente externo.</li>
+				<li><strong>Tempo: </strong>Informação sobre quando a cena
+					ocorre, em que momento ela acontece.</li>
+				<li><strong>Personagens: </strong>Seleção dos personagens que
+					participam da cena.</li>
+				<li><strong>Gatilhos: </strong>Descrição da situação ou
+					situações que existem na cena e que provocam desvio do fluxo normal
+					da história. Devem ser informadas quais são as cenas que os
+					gatilhos disparam.</li>
+				<li><strong>Resultados: </strong>Descrição do que se resulta da
+					cena, o que acontece por causa dela ou a sua conclusão.</li>
+			</ul>
+			<p>
+				Além dos campos acima, é também possível <a
+					href="#adicionarDialogos">adicionar diálogos</a> à cena.
+			</p>
+			<p>
+				Há dois tipos de cenas: as <strong><a
+					href="#criarCenaAPartirDeUmaSentenca">cenas criadas a partir de
+						uma sentença</a></strong>, isto é, aquelas que são oriundas do modelo do
+				processo de negócio, migradas do diagrama BPMN; e as <strong><a
+					href="#criarCenaAdicional">cenas adicionais</a></strong>, que são as cenas
+				que servem para complementar o roteiro do jogo, cobrir os gaps
+				deixados pelas cenas do processo, ou para acrescentar dinâmica e
+				ludicidade para história. Estas cenas são importantes, pois o
+				processos de negócio não são pensados para ter ludicidade e para
+				serem divertidos.
+			</p>
+			<p>É importante destacar algumas regras para cadastrar as cenas
+				do projeto:</p>
+			<ul>
+				<li>Uma cena deve ter um título para identificá-la.</li>
+				<li>As cenas adicionais somente podem ser cadastradas após
+					tratadas (cadastradas ou descartadas) todas as cenas oriundas do
+					cadastro das sentenças.</li>
+				<li>Cenas oriundas de elementos BPMN do tipo <span
+					style="font-style: italic;">Gateway</span>, isto é, que geram
+					bifurcações no fluxo da história, somente podem ser eliminadas após
+					um dos &quot;caminhos&quot; ter todas as suas cenas eliminadas.
+					Isso evita que uma determinada cena possa nunca ser alcançada pelo
+					fluxo da história.
+				</li>
+				<li>Os diálogos apenas podem ser cadastrados após a cena ser
+					efetivamente cadastrada.</li>
+			</ul>
+			<p:separator />
+			<h3 id="criarCenaAPartirDeUmaSentenca">Criar cena a partir de
+				uma sentença</h3>
+			<p>
+				Para criar uma cena a partir de uma sentença é na parte de <a
+					href="ajuda.xhtml?topico=projeto#gerenciarProjeto">Gerenciar</a> o
+				respectivo projeto. No menu de gerenciamento do projeto, basta
+				clicar na opção [Cenas].
+			</p>
+			<p>Será exibida uma lista com todas as sentenças cadastradas.
+				Nessa lista tem um id para ordenar as cenas, o título da cena
+				(originalmente é a sentença), o tipo de elemento BPMN que gerou a
+				sentença, o status (se só tem a sentença ou se já foi gerada cena),
+				além dos botões de ação (criar, modificar e descartar) para cada
+				uma.</p>
+			<p>
+				Para criar a cena, basta clicar no respectivo botão de ação conforme
+				imagem abaixo. Será exibido o formulário de cadastro dos <a
+					href="#regrasGerais">atributos da cena</a>.
+			</p>
+			<h:graphicImage library="img" name="ajuda_botao_criar_cena.png" />
+			<p>Após preencher os campos, para salvar a cena criada basta
+				clicar no botão [Cadastrar cena].</p>
+			<h:graphicImage library="img" name="ajuda_botao_salvar_cena.png" />
+			<p:separator />
+			<h3 id="criarCenaAdicional">Criar cena adicional</h3>
+			<p>
+				Para criar uma cena adicional é na parte de <a
+					href="ajuda.xhtml?topico=projeto#gerenciarProjeto">Gerenciar</a> o
+				respectivo projeto. No menu de gerenciamento do projeto, basta
+				clicar na opção [Cenas].
+			</p>
+			<p>Será exibida uma lista com todas as cenas já cadastradas.
+				Nessa lista tem um id para ordenar as cenas, o título da cena, o
+				status (se é cena criada a partir de uma sentença ou se é cena
+				adicional), além dos botões de ação (criar, modificar e descartar)
+				para cada uma e dos botões de Cena Adicional (antes e depois).</p>
+			<p>Para criar a cena, basta clicar em um dos botões de Cena
+				Adicional, a depender se a cena ficará antes ou depois da cena a que
+				pertence o botão.</p>
+			<h:graphicImage library="img" name="ajuda_cena_adicional.png" />
+			<p>
+				Será exibido o formulário de cadastro dos <a href="#regrasGerais">atributos
+					da cena</a>. Após preencher os campos, para salvar a cena criada basta
+				clicar no botão [Cadastrar cena].
+			</p>
+			<h:graphicImage library="img" name="ajuda_botao_salvar_cena.png" />
+			<p:separator />
+			<h3 id="modificarCena">Modificar cena</h3>
+			<p>
+				Para modificar uma cena é na parte de <a
+					href="ajuda.xhtml?topico=projeto#gerenciarProjeto">Gerenciar</a> o
+				respectivo projeto. No menu de gerenciamento do projeto, basta
+				clicar na opção [Cenas].
+			</p>
+			<p>Será exibida uma lista com todas as cenas já cadastradas.
+				Nessa lista tem os dados da cena, além dos botões de ação (criar,
+				modificar e descartar).</p>
+			<p>
+				Para modificar a cena, basta clicar no respectivo botão de ação
+				conforme imagem abaixo. Será exibido o formulário de cadastro dos <a
+					href="#regrasGerais">atributos da cena</a>. Todos os atributos
+				podem ser alterados e também é possível <a href="#adicionarDialogos">adicionar
+					diálogos</a> à cena.
+			</p>
+			<h:graphicImage library="img" name="ajuda_botao_modificar_cena.png" />
+			<p>Após preencher os campos, para salvar a cena criada basta
+				clicar no botão [Cadastrar cena].</p>
+			<h:graphicImage library="img" name="ajuda_botao_salvar_cena.png" />
+			<p:separator />
+			<h3 id="descartarCena">Descartar cena</h3>
+			<p>
+				Para descartar uma cena é na parte de <a
+					href="ajuda.xhtml?topico=projeto#gerenciarProjeto">Gerenciar</a> o
+				respectivo projeto. No menu de gerenciamento do projeto, basta
+				clicar na opção [Cenas].
+			</p>
+			<p>Será exibida uma lista com todas as cenas já cadastradas.
+				Nessa lista tem os dados da cena, além dos botões de ação (criar,
+				modificar e descartar).</p>
+			<p>
+				Para descartar a cena, basta clicar no respectivo botão de ação
+				conforme imagem abaixo. Importante considerar as <a
+					href="#regrasGerais">regras gerais</a>, no que tange ao descarte de
+				cenas.
+			</p>
+			<h:graphicImage library="img" name="ajuda_botao_descartar_cena.png" />
+			<p>Será exibida uma caixa de mensagem solicitando a confirmação
+				da operação. Ao confirmar, a cena será descartada do projeto.</p>
+			<p:separator />
+			<h3 id="adicionarDialogos">Adicionar diálogos</h3>
+			<p>
+				Os diálogos são as falas dos personagens dentro de uma determinada
+				cena. Para adicionar os diálogos, é necessário <a
+					href="#modificarCena">modificar a cena</a> e ir até a parte
+				inferior do formulário onde tem um link chamado [+ Adicionar
+				diálogos]. Ao clicar neste link será exibida a tela de cadastro de
+				diálogos da cena. Nessa tela, caso a cena já possua falas
+				cadastradas, eles serão apresentados na ordem em que acontecem na
+				cena.
+			</p>
+			<p>
+				Para <strong>criar uma nova fala</strong>, basta clicar no botão
+				[Inserir nova fala no diálogo], que fica na parte superior da tela.
+				Após clicar, será exibida uma janela popup com os campos relativos
+				ao diálogo, onde os campos [Personagem] e [Fala] são obrigatórios.
+			</p>
+			<ul>
+				<li><strong>Introdução: </strong>Campo opcional. Texto a ser
+					exibido antes da fala, com o intuito de ambientar e contextualizar
+					o que ocorre ao fundo do diálogo.</li>
+				<li><strong>Personagem: </strong>Campo obrigatório. É a seleção
+					do personagem envolvido na cena que é o relator do diálogo.</li>
+				<li><strong>Observações: </strong>Campo opcional. Breves
+					comentários adicionais sobre o personagem ou a cena (exemplo: o
+					personagem está olhando para algum lugar, está segurando algum
+					objeto).</li>
+				<li><strong>Fala: </strong>Campo obrigatório. É a descrição da
+					fala do personagem.</li>
+			</ul>
+			<p>Após preencher os campos pertinentes, com o botão [Cadastrar]
+				será efetivado o cadastro da fala na cena e será exibido um box com
+				os dados da fala na tela de cadastro de diálogos da cena.</p>
+			<p>
+				Nesta mesma tela, é possível <strong>editar, apagar ou
+					alterar a ordem das falas</strong> já cadastradas, conforme botões de ação
+				ao lado do box de cada fala:
+			</p>
+			<p:panelGrid columns="2">
+				<h:graphicImage library="img" name="ajuda_botao_subir_fala.png" />
+				<h:outputText
+					value="Subir a fala uma posição acima, ou seja, trocar de ordem com a fala anterior a ela." />
+				<h:graphicImage library="img" name="ajuda_botao_descer_fala.png" />
+				<h:outputText
+					value="Descer a fala uma posição acima, ou seja, trocar de ordem com a fala posterior a ela." />
+				<h:graphicImage library="img" name="ajuda_botao_editar_fala.png" />
+				<h:outputText
+					value="Abrir o popup com os dados da fala para edição. Os campos podem ser alterados e, para registrar as alterações, deve-se clicar no botão [Cadastrar]." />
+				<h:graphicImage library="img" name="ajuda_botao_excluir_fala.png" />
+				<h:outputText value="Excluir a fala da cena." />
+			</p:panelGrid>
+			<p:separator />
+			<p>
+				<a href="ajuda.xhtml?topico=personagens">&#60;&#60; Personagens</a>
+				| <a href="ajuda.xhtml?topico=jornadaDoHeroi">Jornada do Herói
+					&#62;&#62;</a>
+			</p>
+		</p:outputPanel>
+		<p:outputPanel id="jornadaDoHeroi"
+			rendered="#{param.topico.equals('jornadaDoHeroi')}"
+			style="margin-bottom: 100px;">
+			<h1>Jornada do Herói</h1>
+			<h3 id="estagiosDaJornadaDoHeroi">Estágios da Jornada do Herói*</h3>
+			<p>Os estágios da Jornada do Herói são uma estrutura de etapas em
+				que o escritor Joseph Campbell identificou que se repetem em
+				diversos contos e histórias. A estrutura da Jornada do Herói é um
+				maior detalhamento sobre a estrutura de três atos.</p>
+			<p:staticMessage severity="info" summary="DICA"
+				detail="O uso da Jornada do Herói não é obrigatório nesta aplicação. É apenas um recurso adicional para auxiliar os usuários na elaboração de roteiros provendo uma forma utilizada por alguns roteiros de sucesso."
+				style="margin-bottom: 20px;" />
+			<p>Os estágios da Jornada do Herói definidos pelo autor
+				Christopher Vogler são:</p>
+			<ol>
+				<li><strong>(1A) Mundo Comum: </strong>O herói é apresentado no
+					contexto de sua vida normal, onde ele anseia por desafios.</li>
+				<li><strong>(1A) Chamado à Aventura: </strong>O herói é
+					apresentado a um problema, desafio ou aventura a empreender.</li>
+				<li><strong>(1A) Recusa do Chamado:</strong>Nesse momento o
+					herói hesita, recusando o chamado ou manifestando relutância.</li>
+				<li><strong>(1A) Encontro com o Mentor: </strong>O mentor
+					prepara o herói para enfrentar o desconhecido.</li>
+				<li><strong>(2A) Travessia do Primeiro Limiar: </strong>O herói
+					finalmente se compromete com a aventura. É o momento em que a
+					aventura começa.</li>
+				<li><strong>(2A) Provas, Aliados e Inimigos: </strong>O herói
+					encontra novos desafios, faz aliados e inimigos.</li>
+				<li><strong>(2A) Aproximação da Caverna Secreta: </strong>O
+					herói se aproxima do QG do inimigo, onde o objeto da missão está
+					escondido.</li>
+				<li><strong>(2A) Provação: </strong>Momento de suspense e
+					tensão, onde o herói passa por dificuldades ao enfrentar o seu
+					medo.</li>
+				<li><strong>(2A) Recompensa (Empunhando a espada): </strong>O
+					herói toma posse do tesouro que veio buscar, alcança a sua
+					recompensa.</li>
+				<li><strong>(3A) O Caminho de Volta: </strong>O herói toma a
+					decisão de voltar para o mundo comum, ou sua vida normal.</li>
+				<li><strong>(3A) Ressurreição: </strong>O herói é testado mais
+					uma vez para garantir que tenha realmente aprendido as lições.</li>
+				<li><strong>(3A) Retorno com o Elixir: </strong>O herói retorna
+					ao mundo comum, levando a recompensa consigo.</li>
+			</ol>
+			<p>Onde:</p>
+			<ul>
+				<li><strong>(1A): </strong>Primeiro Ato</li>
+				<li><strong>(2A): </strong>Segundo Ato</li>
+				<li><strong>(3A): </strong>Terceiro Ato</li>
+			</ul>
+			<p>Nesta aplicação, é possível fazer uma associação das cenas
+				cadastradas com os estágios da Jornada do Herói, para ajudar o
+				roteirista no encadeamento do roteiro e na criação de uma história
+				de qualidade.</p>
+			<p:staticMessage severity="info" summary="DICA"
+				detail="Não é obrigatório que em uma história exista todos os estágios da Jornada do Herói. A Jornada do Herói não deve ser encarada como uma fórmula."
+				style="margin-bottom: 20px;" />
+			<p style="font-style: italic; color: gray;">*Fontes: (1)
+				Skolnick, Evan. Video Game Storytelling – What Every Developer Needs
+				to Know about Narrative Techniques. Watson-Guptill Publications. (2)
+				Vogler, Christopher. A Jornada do Escritor. Editora Aleph.</p>
+			<p:separator />
+			<h3 id="adicionarCenaAUmEstagio">Adicionar cena a um estágio</h3>
+			<p>
+				Para combinar uma cena com um estágio da Jornada do Herói é na parte
+				de <a href="ajuda.xhtml?topico=projeto#gerenciarProjeto">Gerenciar</a>
+				o respectivo projeto. No menu de gerenciamento do projeto, basta
+				clicar na opção [Jornada do Herói].
+			</p>
+			<p>A tela exibida é dividida em duas partes:</p>
+			<ol>
+				<li><strong>Cenas disponíveis: </strong>Todas as cenas
+					cadastradas no projeto e que ainda não foram associadas com algum
+					estágio da Jornada do Herói.</li>
+				<li><strong>Estágios da Jornada do Herói: </strong>Tabela onde
+					cada coluna é um estágio da Jornada do Herói (vide imagem abaixo) e
+					abaixo dos cabeçalhos ficam os nomes das cenas que estão associadas
+					com aquele estágio.</li>
+			</ol>
+			<h:graphicImage library="img" name="ajuda_tabela_jornada_heroi.png"
+				width="100%" />
+			<p>Para associar a cena a um estágio, basta clicar no botão [+]
+				(mais) que fica na parte inferior da tabela, bem na coluna do
+				estágio escolhido. Depois disso, será exibida uma janela popup, para
+				ser escolhida uma das cenas disponíveis na lista. Após selecionar, é
+				necessário clicar no botão [Confirmar] para efetivar a associação.</p>
+			<p>Na mesma janela popup, também tem um link / atalho para
+				cadastrar uma cena adicional, caso o usuário identifique essa
+				necessidade.</p>
+			<p:separator />
+			<h3 id="removerCenaDeUmEstagio">Remover cena de um estágio</h3>
+			<p>
+				Para desfazer a associação de uma cena com um estágio da Jornada do
+				Herói é na parte de <a
+					href="ajuda.xhtml?topico=projeto#gerenciarProjeto">Gerenciar</a> o
+				respectivo projeto. No menu de gerenciamento do projeto, basta
+				clicar na opção [Jornada do Herói].
+			</p>
+			<p>Na parte inferior da tela, há uma tabela onde cada coluna é um
+				estágio da Jornada do Herói (vide imagem abaixo) e abaixo dos
+				cabeçalhos ficam os nomes das cenas que estão associadas com aquele
+				estágio. Abaixo dos nomes de cada cena, há um link com um [X]. Para
+				remover a cena do estágio, basta clicar neste link e associação será
+				desfeita imediatamente.</p>
+			<h:graphicImage library="img" name="ajuda_tabela_jornada_heroi.png"
+				width="100%" />
+			<p:separator />
+			<p>
+				<a href="ajuda.xhtml?topico=cenas">&#60;&#60; Cenas</a> | <a
+					href="ajuda.xhtml?topico=roteiro">Roteiro &#62;&#62;</a>
+			</p>
+		</p:outputPanel>
+		<p:outputPanel id="roteiro"
+			rendered="#{param.topico.equals('roteiro')}"
+			style="margin-bottom: 100px;">
+			<h1>Roteiro</h1>
+			<h3 id="gerarRoteiroEmTexto">Gerar roteiro em texto</h3>
+			<p>
+				Para consolidar todas as cenas criadas em um documento de texto é na
+				parte de <a href="ajuda.xhtml?topico=projeto#gerenciarProjeto">Gerenciar</a>
+				o respectivo projeto. No menu de gerenciamento do projeto, basta
+				clicar na opção [Roteiro].
+			</p>
+			<p>
+				Será exibida a tela com as configurações do roteiro a ser gerado em
+				texto. Basicamente é possível gerar as escaletas apenas com as <a
+					href="ajuda.xhtml?topico=sentencas">sentenças</a> criadas (os nomes
+				das sentenças ficarão no cabeçalho das cenas), ou gerar o roteiro já
+				com as <a href="ajuda.xhtml?topico=cenas">cenas</a> e seus atributos
+				mais detalhados.
+			</p>
+			<h:graphicImage library="img" name="ajuda_configuracoes_roteiro.png" />
+			<p>Após escolhida a configuração desejada, basta clicar no botão
+				[Gerar Roteiro em Texto] que será gerado o roteiro em formato texto,
+				onde estarão organizadas as cenas da história.</p>
+			<p:separator />
+			<h3 id="gerarRoteiroEmInk">Gerar roteiro em ink</h3>
+			<p>
+				Os passos para gerar o roteiro em <a
+					href="https://www.inklestudios.com/ink/" target="_blank">ink</a>
+				são os mesmos para <a href="#gerarRoteiroEmTexto">gerar o
+					roteiro em texto</a>, com exceção da parte final: ao invés do botão
+				indicado deve ser clicado no botão [Gerar Roteiro em Ink] após
+				escolha das configurações, para baixar o arquivo com o roteiro no
+				formato ink.
+			</p>
+			<p:separator />
+			<p>
+				<a href="ajuda.xhtml?topico=jornadaDoHeroi">&#60;&#60; Jornada
+					do Herói</a>
+			</p>
+		</p:outputPanel>
+	</ui:define>
+</ui:composition>
+</html>

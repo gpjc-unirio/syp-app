@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="_template.xhtml">
+	<f:metadata>
+		<f:viewAction action="#{projetoBean.setViewName('registrarRoteiro')}" />
+		<f:viewParam name="projetoId" value="#{projetoBean.projeto.id}" />
+		<f:viewAction action="#{projetoBean.carregarProjetoPeloId}"
+			if="#{param.projetoId != null}" />
+	</f:metadata>
+	<ui:define name="conteudo">
+		<p:staticMessage id="semAcesso"
+			rendered="#{!projetoBean.isAutorDoProjeto()}" severity="error"
+			detail="Você não possui acesso a este projeto!" summary="ERRO!"
+			style="margin-top: 30px; height: 30px" />
+
+		<h:form rendered="#{projetoBean.isAutorEGerenciaSemSuporte()}">
+			<p:breadCrumb>
+				<p:menuitem value="Meus Projetos" url="inicio.xhtml" />
+				<p:menuitem value="#{projetoBean.projeto.nome}"
+					url="gerenciarProjeto.xhtml?projetoId=#{projetoBean.projeto.id}" />
+				<p:menuitem value="Gerenciar Projeto"
+					url="gerenciarProjeto.xhtml?projetoId=#{projetoBean.projeto.id}" />
+				<p:menuitem value="Registrar Roteiro" url="#" />
+			</p:breadCrumb>
+			<p:outputPanel>
+				<h3>
+					Registrar Roteiro ::
+					<h:outputText value="#{projetoBean.projeto.nome}" />
+				</h3>
+			</p:outputPanel>
+
+			<p:outputPanel style="margin-bottom: 20px">
+				<h:outputText value="Status: " />
+				<h:outputText value="#{projetoBean.projeto.status}"
+					style="font-weight: bold; color: red;" />
+			</p:outputPanel>
+
+			<p:outputPanel>
+				<details> <summary>Modelo BPMN</summary> <p:inputText
+					value="#{projetoBean.arquivo.conteudoXml}" type="hidden"
+					styleClass="conteudoXml" />
+				<div id="viewerBpmn">
+					<div class="well" style="height: 600px" id="canvas"></div>
+				</div>
+				</details>
+			</p:outputPanel>
+			<br />
+
+			<p:outputPanel>
+				<h:panelGrid columns="2">
+					<p:outputLabel value="Local: " for="local" />
+					<h:outputLink id="helpLocal" value="#">
+						<i class="pi pi-question-circle"></i>
+					</h:outputLink>
+					<p:tooltip for="helpLocal" value="Descreva o local da história."
+						position="top" />
+				</h:panelGrid>
+				<p:inputTextarea id="local" rows="5" cols="50"
+					value="#{projetoBean.projeto.local}" />
+			</p:outputPanel>
+			<br />
+
+			<p:outputPanel>
+				<h:panelGrid columns="2">
+					<p:outputLabel value="Personagens: " for="personagens" />
+					<h:outputLink id="helpPersonagens" value="#">
+						<i class="pi pi-question-circle"></i>
+					</h:outputLink>
+					<p:tooltip for="helpPersonagens"
+						value="Descreva os personagens da história." position="top" />
+				</h:panelGrid>
+				<p:inputTextarea id="personagens" rows="5" cols="50"
+					value="#{projetoBean.projeto.personagensTemp}" />
+			</p:outputPanel>
+			<br />
+
+			<p:outputPanel>
+				<h:panelGrid columns="2">
+					<p:outputLabel value="Objetos: " for="objetos" />
+					<h:outputLink id="helpObjetos" value="#">
+						<i class="pi pi-question-circle"></i>
+					</h:outputLink>
+					<p:tooltip for="helpObjetos"
+						value="Descreva os objetos manipulados na história."
+						position="top" />
+				</h:panelGrid>
+				<p:inputTextarea id="objetos" rows="5" cols="50"
+					value="#{projetoBean.projeto.objetos}" />
+			</p:outputPanel>
+			<br />
+
+			<p:outputPanel>
+				<h:panelGrid columns="2">
+					<p:outputLabel value="Roteiro: " for="roteiro" />
+					<h:outputLink id="helpRoteiro" value="#">
+						<i class="pi pi-question-circle"></i>
+					</h:outputLink>
+					<p:tooltip for="helpRoteiro" value="Escreva a narrativa completa."
+						position="top" />
+				</h:panelGrid>
+				<p:editor id="roteiro" width="600"
+					value="#{projetoBean.projeto.roteiro}" />
+			</p:outputPanel>
+
+			<br />
+			<p:commandButton value="Registrar Roteiro"
+				action="#{projetoBean.gravarRoteiro}" update="@form" process="@form"
+				icon="pi pi-fw pi-save" />
+
+		</h:form>
+
+		<script>
+			$(document).ready(function() {
+				if ($('.conteudoXml').val().length > 0) {
+					carregarBpmn($('.conteudoXml').val());
+				}
+			});
+
+			function carregarBpmn(xml) {
+				// Crio a instância do componente de visualização de BPMN
+				var BpmnNavigatedViewer = window.BpmnJS;
+				var bpmnViewer = new BpmnNavigatedViewer({
+					//Coloco o elemento CANVAS responsável por exibir o diagrama BPMN
+					container : '#canvas'
+				});
+
+				//Importo o BPMN - lembrando que é a estrutura mesmo do arquivo e não o caminho
+				bpmnViewer.importXML(xml, function(err) {
+					if (err) {
+						alert('It was not possible to import BPMN 2.0 diagram',
+								err);
+					} else {
+						//Carrega o bpmn para dentro do elemento canvas
+						var canvas = bpmnViewer.get('canvas');
+						//Colcar o diagrama de acordo com o tamanho da tela e do elemento canvas.
+						canvas.zoom('fit-viewport');
+					}
+				});
+			}
+		</script>
+
+	</ui:define>
+</ui:composition>
+</html>

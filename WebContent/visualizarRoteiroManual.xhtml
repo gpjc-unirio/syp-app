@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="_template.xhtml">
+	<f:metadata>
+		<f:viewParam name="projetoId" value="#{projetoBean.projeto.id}" />
+		<f:viewAction action="#{projetoBean.carregarProjetoPeloId}"
+			if="#{param.projetoId != null}" />
+	</f:metadata>
+	<ui:define name="conteudo">
+		<h:outputStylesheet name="formato_roteiro.css" library="css" />
+		<p:staticMessage id="semAcesso"
+			rendered="#{!projetoBean.isAutorDoProjeto()}" severity="error"
+			detail="Você não possui acesso a este projeto!" summary="ERRO!"
+			style="margin-top: 30px; height: 30px" />
+		<h:form rendered="#{projetoBean.isAutorDoProjeto()}">
+			<p:breadCrumb>
+				<p:menuitem value="Meus Projetos" url="inicio.xhtml" />
+				<p:menuitem value="#{projetoBean.projeto.nome}"
+					url="gerenciarProjeto.xhtml?projetoId=#{projetoBean.projeto.id}" />
+				<p:menuitem value="Gerenciar Projeto"
+					url="gerenciarProjeto.xhtml?projetoId=#{projetoBean.projeto.id}" />
+				<p:menuitem value="Roteiro para Impressão" url="#" />
+			</p:breadCrumb>
+			<p:outputPanel>
+				<h3>
+					Roteiro ::
+					<h:outputText value="#{projetoBean.projeto.nome}" />
+				</h3>
+			</p:outputPanel>
+			<h:panelGrid columns="2">
+				<p:commandButton value="Imprimir Roteiro" icon="pi pi-print"
+					style="display:block; margin-bottom: 20px;">
+					<p:printer target="roteiro" />
+				</p:commandButton>
+				<p:commandButton value="Exportar como PDF" icon="pi pi-file-pdf"
+					style="display:block; margin-bottom: 20px;" disabled="true">
+					<p:dataExporter type="pdf" target="roteiro" fileName="roteiro" />
+				</p:commandButton>
+			</h:panelGrid>
+			<p:separator />
+			<p:outputPanel id="roteiro">
+				<h:panelGrid columns="1">
+					<h:outputText value="Título: #{projetoBean.projeto.nome}" />
+					<br />
+					<h:outputText value="Local: #{projetoBean.projeto.local}" />
+					<br />
+					<h:outputText
+						value="Personagens: #{projetoBean.projeto.personagensTemp}" />
+					<br />
+					<h:outputText value="#{projetoBean.projeto.roteiro}" escape="false" />
+				</h:panelGrid>
+			</p:outputPanel>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

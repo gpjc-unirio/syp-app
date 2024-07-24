@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="_template.xhtml">
+	<f:metadata>
+		<f:viewParam name="cenaId" value="#{dialogoBean.cena.id}" />
+		<f:viewAction action="#{dialogoBean.carregarCenaPeloId}"
+			if="#{param.cenaId != null}" />
+	</f:metadata>
+	<ui:define name="conteudo">
+
+		<p:staticMessage id="semAcesso"
+			rendered="#{!dialogoBean.isAutorDoProjeto()}" severity="error"
+			detail="Você não possui acesso a este projeto!" summary="ERRO!"
+			style="margin-top: 30px; height: 30px" />
+
+		<h:form rendered="#{dialogoBean.isAutorDoProjeto()}" id="form0">
+
+			<p:breadCrumb>
+				<p:menuitem value="Meus Projetos" url="inicio.xhtml" />
+				<p:menuitem value="#{dialogoBean.projeto.nome}"
+					url="gerenciarProjeto.xhtml?projetoId=#{dialogoBean.projeto.id}" />
+				<p:menuitem value="#{languageBean.labelManage}"
+					url="gerenciarProjeto.xhtml?projetoId=#{cenaBean.projeto.id}" />
+				<p:menuitem value="#{languageBean.cenaCompor}"
+					url="escolherSentencaParaCena.xhtml?projetoId=#{dialogoBean.projeto.id}" />
+				<p:menuitem value="#{dialogoBean.cena.titulo}"
+					url="comporCena.xhtml?cenaId=#{dialogoBean.cena.id}" />
+				<p:menuitem value="#{languageBean.dialogoCena}" url="#" />
+			</p:breadCrumb>
+
+			<p:outputPanel>
+				<h3>
+					<h:outputText value="#{languageBean.dialogoCena}"/> ::
+					<h:outputText value="#{dialogoBean.cena.titulo}" />
+				</h3>
+			</p:outputPanel>
+
+			<p:commandButton value="#{languageBean.dialogoInserir}"
+				action="#{dialogoBean.editarDialogo(0)}"
+				style="margin-bottom: 20px;" icon="pi pi-file" update="form2" />
+
+		</h:form>
+		<h:form rendered="#{dialogoBean.isAutorDoProjeto()}" id="form1">
+
+			<p:dataGrid layout="grid" value="#{dialogoBean.dialogosDaCena}"
+				var="dialogo">
+				<h:panelGrid columns="2">
+					<p:panel header="##{dialogo.ordem}">
+						<h:panelGrid columns="2">
+
+							<p:outputLabel for="introducao" value="#{languageBean.dialogoIntroducao} " />
+							<p:inputTextarea id="introducao" disabled="true"
+								value="#{dialogo.introducao}" />
+
+							<p:outputLabel for="personagem" value="#{languageBean.dialogoPersonagem}: " />
+							<p:inputText id="personagem" disabled="true"
+								value="#{dialogo.personagem.nome}" />
+
+							<p:outputLabel for="observacoes" value="#{languageBean.dialogoObs }: " />
+							<p:inputText id="observacoes" disabled="true"
+								value="#{dialogo.observacoes}" />
+
+							<p:outputLabel for="dialogo" value="#{languageBean.dialogoFala}: " />
+							<p:inputTextarea id="dialogo" disabled="true"
+								value="#{dialogo.discurso}" />
+
+						</h:panelGrid>
+					</p:panel>
+
+					<h:panelGrid columns="1">
+						<p:commandButton icon="pi pi-chevron-up"
+							title="Mudar a ordem da fala para antes"
+							disabled="#{dialogo.ordem == 1}" update="form1"
+							action="#{dialogoBean.subirOrdem(dialogo.id)}" />
+						<p:commandButton icon="pi pi-pencil" title="Modificar a fala"
+							action="#{dialogoBean.editarDialogo(dialogo.id)}"
+							style="margin-top: 20px; margin-bottom: 10px;" update="form2" />
+						<p:commandButton icon="pi pi-trash" title="Eliminar a fala"
+							action="#{dialogoBean.excluirDialogo(dialogo.id)}"
+							style="margin-top: 10px; margin-bottom: 20px; color: red;"
+							update="form1" />
+						<p:commandButton icon="pi pi-chevron-down" update="form1"
+							title="Mudar a ordem da fala para depois"
+							disabled="#{dialogo.ordem == dialogoBean.dialogosDaCena.size()}"
+							action="#{dialogoBean.descerOrdem(dialogo.id)}" />
+					</h:panelGrid>
+				</h:panelGrid>
+
+			</p:dataGrid>
+
+		</h:form>
+		<h:form rendered="#{dialogoBean.isAutorDoProjeto()}" id="form2">
+
+			<p:dialog header="#{languageBean.dialogoNovo}" modal="true"
+				widgetVar="modalNovoDialogo">
+
+				<p:messages showDetail="false" showIcon="true" closable="true"
+					id="messageValidacaoNovoDialogo" />
+
+				<h:inputHidden value="#{dialogoBean.novoDialogo.id}" />
+
+				<h:panelGrid columns="4">
+
+					<p:outputLabel for="introducaoNovoDialogo" value="#{languageBean.dialogoIntroducao}: " />
+					<p:inputTextarea id="introducaoNovoDialogo" cols="39" rows="5"
+						value="#{dialogoBean.novoDialogo.introducao}" maxlength="3096"
+						validatorMessage="Introdução: Limite de caracteres (3096) extrapolado"
+						autoResize="false">
+						<f:ajax event="blur" render="messageValidacaoNovoDialogo" />
+					</p:inputTextarea>
+					<h:outputLink id="helpIntroducao" value="#">
+						<i class="pi pi-question-circle"></i>
+					</h:outputLink>
+					<p:tooltip for="helpIntroducao"
+						value="Opcional. Texto a ser exibido antes da fala, com o intuito de ambientar e contextualizar o que ocorre ao fundo do diálogo."
+						position="top" />
+
+					<p:outputLabel for="personagemNovoDialogo" value="#{languageBean.dialogoPersonagem}: " />
+					<p:selectOneMenu id="personagemNovoDialogo" required="true"
+						value="#{dialogoBean.idPersonagemNovoDialogo}"
+						style="width: 252px;"
+						validatorMessage="Personagem: Preenchimento obrigatório!">
+						<f:validateLength minimum="1" />
+						<f:selectItem itemLabel="Escolha um..." itemValue="" />
+						<f:selectItems value="#{dialogoBean.personagensDaCena}"
+							var="personagem" itemLabel="#{personagem.nome}"
+							itemValue="#{personagem.id}" />
+					</p:selectOneMenu>
+					<h:outputLink id="helpPersonagem" value="#">
+						<i class="pi pi-question-circle"></i>
+					</h:outputLink>
+					<p:tooltip for="helpPersonagem"
+						value="Personagem envolvido na cena que é o relator do diálogo."
+						position="top" />
+
+					<p:outputLabel for="observacoesNovoDialogo" value="#{languageBean.dialogoObs}: " />
+					<p:inputTextarea id="observacoesNovoDialogo"
+						value="#{dialogoBean.novoDialogo.observacoes}" cols="39" rows="2"
+						maxlength="255"
+						validatorMessage="Fala: Limite de caracteres (255) extrapolado"
+						autoResize="false">
+						<f:ajax event="blur" render="messageValidacaoNovoDialogo" />
+					</p:inputTextarea>
+					<h:outputLink id="helpObservacoes" value="#">
+						<i class="pi pi-question-circle"></i>
+					</h:outputLink>
+					<p:tooltip for="helpObservacoes"
+						value="Opcional. Breves comentários adicionais sobre o personagem ou a cena (exemplo: o personagem está olhando para algum lugar, está segurando algum objeto)."
+						position="top" />
+
+					<p:outputLabel for="falaNovoDialogo" value="#{languageBean.dialogoFala}: " />
+					<p:inputTextarea id="falaNovoDialogo" required="true"
+						value="#{dialogoBean.novoDialogo.discurso}" cols="39" rows="5"
+						requiredMessage="Fala: Preenchimento obrigatório!"
+						maxlength="3096"
+						validatorMessage="Fala: Limite de caracteres (3096) extrapolado"
+						autoResize="false">
+						<f:ajax event="blur" render="messageValidacaoNovoDialogo" />
+					</p:inputTextarea>
+					<h:outputLink id="helpFala" value="#">
+						<i class="pi pi-question-circle"></i>
+					</h:outputLink>
+					<p:tooltip for="helpFala" value="Descrição da fala do personagem."
+						position="top" />
+
+				</h:panelGrid>
+
+				<p:commandButton value="#{languageBean.personagemBtnGravar}" update="form1"
+					action="#{dialogoBean.inserirDialogo}"
+					style="margin-top: 20px; float: right;" />
+
+			</p:dialog>
+
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

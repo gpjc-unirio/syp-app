@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="_template.xhtml">
+	<f:metadata>
+		<f:viewAction action="#{sentencaBean.setViewName('ajustarSentencas')}" />
+		<f:viewParam name="projetoId" value="#{sentencaBean.projeto.id}" />
+		<f:viewAction action="#{sentencaBean.carregarProjetoPeloId}"
+			if="#{param.projetoId != null}" />
+	</f:metadata>
+	<ui:define name="conteudo">
+		<p:staticMessage id="semAcesso"
+			rendered="#{!sentencaBean.isAutorDoProjeto()}" severity="error"
+			detail="Você não possui acesso a este projeto!" summary="ERRO!"
+			style="margin-top: 30px; height: 30px" />
+		<p:staticMessage id="naoPodeGerarRoteiro"
+			rendered="#{!sentencaBean.podeGerarRoteiro()}" severity="error"
+			detail="As sentenças desse projeto ainda não foram geradas!"
+			summary="ERRO!" style="margin-top: 30px; height: 30px" />
+		<h:form rendered="#{sentencaBean.podeGerarRoteiro()}" id="form">
+			<p:breadCrumb>
+				<p:menuitem value="Meus Projetos" url="inicio.xhtml" />
+				<p:menuitem value="#{sentencaBean.projeto.nome}"
+					url="gerenciarProjeto.xhtml?projetoId=#{sentencaBean.projeto.id}" />
+				<p:menuitem value="#{languageBean.labelManage}"
+					url="gerenciarProjeto.xhtml?projetoId=#{sentencaBean.projeto.id}" />
+				<p:menuitem value="#{languageBean.sentencaLblAjuste}" url="#" />
+			</p:breadCrumb>
+			<p:outputPanel style="margin-top: 10px;">
+				<h3><h:outputText value="#{languageBean.sentencaLblCadastrada}" />:</h3>
+			</p:outputPanel>
+			<p:staticMessage severity="info" summary="#{languageBean.labelDica}"
+				detail="#{languageBean.sentencaDica}"
+				style="margin-bottom: 20px;" />
+
+			<p:dataTable
+				rendered="#{sentencaBean.listaDeSentencasDoProjeto.size()>0}"
+				var="sentenca" value="#{sentencaBean.listaDeSentencasDoProjeto}"
+				tableStyle="width:auto">
+				<p:column headerText="Id">
+					<h:outputText value="#{sentenca.numero}" />
+				</p:column>
+				<p:column headerText="#{languageBean.sentencaClmSentenca}">
+					<p:commandLink action="#{sentencaBean.carregarSentenca(sentenca)}"
+						update="@form">
+						<h:outputText value="#{sentenca.getSentencaCompleta()}" />
+					</p:commandLink>
+				</p:column>
+				<p:column headerText="#{languageBean.sentencaClmBPMN}">
+					<h:outputText value="#{sentenca.tipoDeElementoBPMN}" />
+				</p:column>
+				<p:column headerText="#{languageBean.sentencaClmProxima}">
+					<h:outputText
+						value="#{sentenca.getTextoListaDasProximasSentencas()}" />
+				</p:column>
+			</p:dataTable>
+
+			<p:dialog header="#{languageBean.sentencaLblAjuste}" modal="true"
+				widgetVar="modalAjusteDeSentenca" showEffect="fade"
+				hideEffect="fade" id="modal">
+				<p:panelGrid columns="2" layout="flex">
+					<h:outputText value="#{languageBean.sentencaSujeito}" />
+					<p:inputText value="#{sentencaBean.sentenca.sujeito}" />
+					<h:outputText value="#{languageBean.sentencaVerbo}" />
+					<p:inputText value="#{sentencaBean.sentenca.verbo}" />
+					<h:outputText value="#{languageBean.sentencaComplementos}" />
+					<p:inputTextarea value="#{sentencaBean.sentenca.complementos}"
+						rows="5" cols="50" />
+					<p:commandButton action="#{sentencaBean.atualizarSentenca()}"
+						value="#{languageBean.sentencaBtnAtualizar}" update="@form" />
+				</p:panelGrid>
+			</p:dialog>
+
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

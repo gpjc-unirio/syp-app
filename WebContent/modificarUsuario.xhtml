@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="_template.xhtml">
+	<ui:define name="conteudo">
+		<p:outputPanel>
+			<h3><h:outputText value="#{languageBean.usuarioLabelNovo}"/> </h3>
+		</p:outputPanel>
+		<p:staticMessage id="semAcesso"
+			rendered="#{!usuarioLogado.isUsuarioAdministrador()}"
+			severity="error"
+			detail="Você não possui permissão para cadastrar usuários."
+			summary="ERRO!" style="margin-top: 30px; height: 30px" />
+		<h:form rendered="#{usuarioLogado.isUsuarioAdministrador()}">
+			<p:fieldset legend="#{languageBean.usuarioLabel}">
+				<h:panelGrid columns="2">
+					<p:outputLabel for="selecaoDeUsuario" value="#{languageBean.usuarioLabel}: " />
+					<p:selectOneListbox id="selecaoDeUsuario" filter="true"
+						filterMatchMode="contains"
+						value="#{modificarUsuarioBean.idUsuario}">
+						<p:ajax update="nome,email,perfil" />
+						<f:selectItems value="#{modificarUsuarioBean.todosOsUsuarios}"
+							var="usuario" itemLabel="#{usuario.nomeUsuario}"
+							itemValue="#{usuario.id}" />
+					</p:selectOneListbox>
+				</h:panelGrid>
+
+				<p:separator />
+
+				<h:panelGrid columns="3" id="painelUsuarioSelecionado">
+					<p:outputLabel value="#{languageBean.usuarioNome}: " for="nome" />
+					<p:inputText id="nome"
+						value="#{modificarUsuarioBean.usuario.nomeUsuario}"
+						required="true" requiredMessage="Preenchimento obrigatório"
+						validatorMessage="Mínimo 3 caracteres">
+						<f:validateLength minimum="3" />
+						<f:passThroughAttribute name="placeholder" value="Nome" />
+						<f:ajax event="blur" render="messageNome" />
+					</p:inputText>
+					<p:message for="nome" id="messageNome" />
+
+					<p:outputLabel value="E-mail: " for="email" />
+					<p:inputText id="email"
+						value="#{modificarUsuarioBean.usuario.emailUsuario}"
+						required="true" size="40"
+						requiredMessage="Preenchimento obrigatório"
+						validatorMessage="Formato inválido">
+						<f:attribute name="type" value="email" />
+						<f:passThroughAttribute name="placeholder" value="Email" />
+						<f:validateRegex pattern=".+@.+" />
+						<f:ajax event="blur" render="messageEmail" />
+					</p:inputText>
+					<p:message for="email" id="messageEmail" />
+
+					<p:outputLabel value="#{languageBean.usuarioPerfil}: " for="perfil" />
+					<p:selectOneRadio id="perfil"
+						value="#{modificarUsuarioBean.usuario.perfilUsuario}"
+						required="true" requiredMessage="Preenchimento obrigatório">
+						<f:selectItems value="#{modificarUsuarioBean.perfis}" var="perfil"
+							itemValue="#{perfil}" />
+					</p:selectOneRadio>
+					<p:message for="perfil" id="messagePerfil" />
+
+					<p:commandButton value="#{languageBean.usuarioBtnAtualizar}"
+						action="#{modificarUsuarioBean.gravar}" process="@form"
+						update="@form" icon="pi pi-fw pi-save" />
+				</h:panelGrid>
+
+
+			</p:fieldset>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>
