@@ -32,39 +32,39 @@
 **SYPApp** is built using:
 
 * [Java](https://java.com/), considering JAVA EE using JSF (JavaServer Pages) v2.2.
-* [JavaServer Faces Technology](https://www.oracle.com/java/technologies/javaserverfaces.html) a Java technology for bulding server-side user interfaces to the web.
-* [Prime Faces](https://www.primefaces.org/) version 8.0, for some of the components. 
-* [Hibernate](https://hibernate.org/), for ORM framework that connects the data base to software features. 
+* [JavaServer Faces Technology](https://www.oracle.com/java/technologies/javaserverfaces.html) a Java technology for building server-side user interfaces to the web.
+* [Prime Faces](https://www.primefaces.org/) version 8.0, for some components. 
+* [Hibernate](https://hibernate.org/), for ORM framework that connects the database to software features. 
 * [Tomcat](https://tomcat.apache.org/download-90.cgi) v.9, apache server for Java web.
-* [MySQL](https://www.mysql.com/) v. 5.7, for Data Base repositories. 
+* [MySQL](https://www.mysql.com/) v. 5.7, for database repositories. 
 * [BPMN](https://www.omg.org/spec/BPMN/2.0/About-BPMN/), as business process language to convert into narrative elements. 
-* [Camunda](https://github.com/camunda/camunda-modeler) v. 7.1.0 libray for manipulate BPMN files.
+* [Camunda](https://github.com/camunda/camunda-modeler) v. 7.1.0 library for manipulate BPMN files.
 
 
 ## SYPApp Development
 
 To build the project:
 
-* Install [MySQL](https://www.mysql.com/) if you don't already have it. After that, create a data base instance or schema (we recomend the name syp for te instance) and a user with root permission (create, update and delete the data base metadata and records)
-* Install [Eclipse IDE](https://www.eclipse.org/downloads/packages/release/oxygen/3a/eclipse-ide-java-developers) to edit the Java code.
+* Install [MySQL](https://www.mysql.com/) if you don't already have it. After that, create a database instance or schema (we recommend the name syp for te instance) and a user with root permission (create, update and delete the database metadata and records)
+* Install [IntelliJ IDE](https://www.jetbrains.com/idea/download/) to edit the Java code.
 * Clone the repository
-* Importe the source code into Eclipse
-* In the file **"persistence.xml"** (inside of META-INF directory) update the user's information to access the data base. So, create (or uptade, in case of it exists) three tags:
+* Import the source code into Eclipse
+* In the file **"persistence.xml"** (inside of META-INF directory) update the user's information to access the database. So, create (or update, in case of it exists) three tags:
 
 ```
 <property name="javax.persistence.jdbc.url" value="" />
 ```
-In the 'value' attribute you must put the server address. Ex.: jdbc:mysql://localhost/syp?useSSL=false (in caso of your data base schema was called by "syp")
+In the 'value' attribute you must put the server address. Ex.: jdbc:mysql://localhost/syp?useSSL=false&amp;createDatabaseIfNotExist=true
 
 ```
 <property name="javax.persistence.jdbc.user" value="" />
 ```
-In the 'value' attribute you must put the data base user name.
+In the 'value' attribute you must put the database user name.
 
 ```
 <property name="javax.persistence.jdbc.password" value="" />
 ```
-In the 'value' attribute you must put the data base user password.
+In the 'value' attribute you must put the database user password.
 
 * Server configuration: Before starting the Tomcat server, save the .war file into the "webapps" directory and run the server. After this, the software is ready to run. Case necessary, edit the BPMN file path (directory META-INF ''bpmn_directory.txt''. It is required to put the correct serve path information. If your Tomcat server runs applications inside of "webapps" folder, you do not need to do anything).
 
