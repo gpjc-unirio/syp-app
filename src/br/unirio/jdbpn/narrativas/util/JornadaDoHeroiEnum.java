@@ -1,11 +1,11 @@
 package br.unirio.jdbpn.narrativas.util;
 
 public enum JornadaDoHeroiEnum {
-	mundoComum("Mundo Comum"), chamadoAAventura("Chamado à Aventura"), recusaDoChamado("Recusa do Chamado"),
+	mundoComum("Mundo Comum"), chamadoAAventura("Chamado Ã  Aventura"), recusaDoChamado("Recusa do Chamado"),
 	encontroComOMentor("Encontro com o Mentor"), travessiaDoPrimeiroLimiar("Travessia do Primeiro Limiar"),
-	provasAliadosEInimigos("Provas, Aliados e Inimigos"), aproximacaoDaCavernaSecreta("Aproximação da Caverna Secreta"),
-	provacao("Provação"), recompensaEmpunhandoAEspada("Recompensa (Empunhando a Espada)"),
-	oCaminhoDeVolta("O Caminho de Volta"), ressurreicao("Ressurreição"), retornoComOElixir("Retorno com o Elixir");
+	provasAliadosEInimigos("Provas, Aliados e Inimigos"), aproximacaoDaCavernaSecreta("AproximaÃ§Ã£o da Caverna Secreta"),
+	provacao("ProvaÃ§Ã£o"), recompensaEmpunhandoAEspada("Recompensa (Empunhando a Espada)"),
+	oCaminhoDeVolta("O Caminho de Volta"), ressurreicao("RessurreiÃ§Ã£o"), retornoComOElixir("Retorno com o Elixir");
 
 	private final String nome;
 

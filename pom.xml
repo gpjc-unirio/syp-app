@@ -5,7 +5,12 @@
   <version>1.2.1-SNAPSHOT</version>
   <packaging>war</packaging>
   <name>SYPApp</name>
-  <build>
+	<properties>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+	<build>
     <sourceDirectory>src</sourceDirectory>
     <resources>
       <resource>
@@ -16,12 +21,21 @@
       </resource>
     </resources>
     <plugins>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-resources-plugin</artifactId>
+			<version>3.2.0</version>
+			<configuration>
+				<encoding>UTF-8</encoding>
+			</configuration>
+		</plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.8.1</version>
         <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
+          <source>17</source>
+          <target>17</target>
+		  <encoding>UTF-8</encoding>
         </configuration>
       </plugin>
       <plugin>
@@ -31,6 +45,17 @@
           <warSourceDirectory>WebContent</warSourceDirectory>
         </configuration>
       </plugin>
+		<plugin>
+			<groupId>org.apache.tomcat.maven</groupId>
+			<artifactId>tomcat7-maven-plugin</artifactId>
+			<version>2.2</version>
+			<configuration>
+				<url>http://200.156.26.156:8080/manager/text</url>
+				<path>/SYPApp</path>
+				<username>joccom</username>
+				<password>Ghs82jfPq</password>
+			</configuration>
+		</plugin>
 	</plugins>
   </build>
   <repositories>
@@ -127,11 +152,11 @@
 	    <artifactId>jboss-transaction-api_1.2_spec</artifactId>
 	    <version>1.0.1.Final</version>
 	</dependency>
-	<dependency>
-	    <groupId>mysql</groupId>
-	    <artifactId>mysql-connector-java</artifactId>
-	    <version>8.0.33</version>
-	</dependency>
+	  <dependency>
+		  <groupId>org.mariadb.jdbc</groupId>
+		  <artifactId>mariadb-java-client</artifactId>
+		  <version>3.0.6</version>
+	  </dependency>
 	<dependency>
 	    <groupId>javax.validation</groupId>
 	    <artifactId>validation-api</artifactId>

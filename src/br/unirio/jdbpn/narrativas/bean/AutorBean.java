@@ -56,7 +56,7 @@ public class AutorBean implements Serializable {
 			if (autor == null) {
 				context.getExternalContext().getFlash().setKeepMessages(true);
 				context.addMessage(null,
-						new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Autor ainda n„o cadastrado"));
+						new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Autor ainda n√£o cadastrado"));
 			} else {
 				for (Usuario usuario : autoresDoProjeto) {
 					if (usuario.getEmailUsuario().equals(autor.getEmailUsuario())) {
@@ -65,8 +65,8 @@ public class AutorBean implements Serializable {
 				}
 				if (isAutorJaCadastrado) {
 					context.getExternalContext().getFlash().setKeepMessages(true);
-					context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Nenhuma aÁ„o",
-							"Autor j· tinha sido adicionado"));
+					context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Nenhuma a√ß√£o",
+							"Autor j√° tinha sido adicionado"));
 				} else {
 					autoresDoProjeto.add(autor);
 					this.projeto.setAutores(autoresDoProjeto);

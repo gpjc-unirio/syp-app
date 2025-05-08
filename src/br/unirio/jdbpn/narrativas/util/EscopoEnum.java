@@ -1,7 +1,7 @@
 package br.unirio.jdbpn.narrativas.util;
 
 public enum EscopoEnum {
-	Sentencas("Sentenças"), Cenas("Cenas");
+	Sentencas("SentenÃ§as"), Cenas("Cenas");
 
 	private final String descricao;
 

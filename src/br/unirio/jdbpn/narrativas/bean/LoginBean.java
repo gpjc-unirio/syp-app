@@ -26,7 +26,7 @@ public class LoginBean implements Serializable {
 	}
 
 	public String efetuarLogin() {
-		System.out.println("Fazendo login do usu·rio: " + this.usuario.getEmailUsuario());
+		System.out.println("Fazendo login do usu√°rio: " + this.usuario.getEmailUsuario());
 
 		FacesContext context = FacesContext.getCurrentInstance();
 
@@ -60,7 +60,7 @@ public class LoginBean implements Serializable {
 			}
 
 			context.getExternalContext().getFlash().setKeepMessages(true);
-			context.addMessage(null, new FacesMessage("Login inv·lido"));
+			context.addMessage(null, new FacesMessage("Login inv√°lido"));
 
 			return "login?faces-redirect=true";
 

@@ -19,8 +19,6 @@ import br.unirio.jdbpn.narrativas.model.Sentenca;
 
 public abstract class InkConverter {
 
-	// TODO: Alterar os nomes dos nós para prevenir repetições de complementos
-
 	private static List<Sentenca> listaDeSentencasDoProjeto;
 	private static List<Integer> listaDesentencasJaEscritas;
 	private static List<Cena> listaDeCenasObsInk;
@@ -49,12 +47,12 @@ public abstract class InkConverter {
 				if (primeiraSentenca.getId() == 0 && sentenca.getNumero() == 1) {
 					primeiraSentenca = sentenca;
 				}
-				if (sentenca.getTipoDeElementoBPMN().equals(TipoDeElementoEnum.GATEWAY_PARALELO.getTipo())) {
+				if (sentenca.getTipoDeElementoBPMN() != null && sentenca.getTipoDeElementoBPMN().equals(TipoDeElementoEnum.GATEWAY_PARALELO.getTipo())) {
 					quantidadeDeGatewaysParalelos++;
 				}
 			}
 
-			// Tratamento para os gateways paralelos (criação das variáveis)
+			// Tratamento para os gateways paralelos (criacao das variaveis)
 			if (quantidadeDeGatewaysParalelos > 0) {
 				textoFinal = new ArrayList<String>();
 				for (int i = 1; i <= quantidadeDeGatewaysParalelos; i++) {
@@ -86,12 +84,12 @@ public abstract class InkConverter {
 				if (primeiraSentenca.getId() == 0 && sentenca.getNumero() == 1) {
 					primeiraSentenca = sentenca;
 				}
-				if (sentenca.getTipoDeElementoBPMN().equals(TipoDeElementoEnum.GATEWAY_PARALELO.getTipo())) {
+				if (sentenca.getTipoDeElementoBPMN() != null && sentenca.getTipoDeElementoBPMN().equals(TipoDeElementoEnum.GATEWAY_PARALELO.getTipo())) {
 					quantidadeDeGatewaysParalelos++;
 				}
 			}
 
-			// Tratamento para os gateways paralelos (criação das variáveis)
+			// Tratamento para os gateways paralelos (criaï¿½ï¿½o das variï¿½veis)
 			if (quantidadeDeGatewaysParalelos > 0) {
 				textoFinal = new ArrayList<String>();
 				for (int i = 1; i <= quantidadeDeGatewaysParalelos; i++) {
@@ -143,13 +141,13 @@ public abstract class InkConverter {
 				bufferedWriter.newLine();
 			}
 
-			// Descrição breve da cena
+			// Descriï¿½ï¿½o breve da cena
 			if (cena.getDescricaoBreve() != null && cena.getDescricaoBreve().length() > 1) {
-				bufferedWriter.write(indentacao(qtdDeIndentacao) + "Descrição da Cena: " + cena.getDescricaoBreve());
+				bufferedWriter.write(indentacao(qtdDeIndentacao) + "DescriÃ§Ã£o da Cena: " + cena.getDescricaoBreve());
 				bufferedWriter.newLine();
 			}
 
-			// Diálogos da cena
+			// Diï¿½logos da cena
 			List<Dialogo> dialogos = new DialogoDao().buscarPorCena(cena);
 			if (dialogos != null && dialogos.size() > 0) {
 				for (Dialogo dialogo : dialogos) {
@@ -177,7 +175,7 @@ public abstract class InkConverter {
 					ArrayList<Cena> cenasEncontradas = processarCenasExtras(cena.getSentenca(), bufferedWriter, qtdDeIndentacao, false);
 					
 					if(cenasEncontradas.size() > 0) {
-						bufferedWriter.write(indentacao(qtdDeIndentacao) + "* [Próxima Cena]");
+						bufferedWriter.write(indentacao(qtdDeIndentacao) + "* [PrÃ³xima Cena]");
 						bufferedWriter.newLine();
 						qtdDeIndentacao--;
 						
@@ -223,7 +221,7 @@ public abstract class InkConverter {
 							qtdDeIndentacao--;
 						}else {
 							if(loopScene == null) {
-								bufferedWriter.write(indentacao(qtdDeIndentacao) + "* [Próxima Cena]");
+								bufferedWriter.write(indentacao(qtdDeIndentacao) + "* [PrÃ³xima Cena]");
 								bufferedWriter.newLine();
 								qtdDeIndentacao--;
 							}
@@ -232,7 +230,7 @@ public abstract class InkConverter {
 						
 						String txtFinalSentenca = "";
 						if(loopScene == null) {
-							txtFinalSentenca = indentacao(qtdDeIndentacao) + "* [Próxima Cena]";
+							txtFinalSentenca = indentacao(qtdDeIndentacao) + "* [PrÃ³xima Cena]";
 							bufferedWriter.write(txtFinalSentenca);
 							bufferedWriter.newLine();
 							qtdDeIndentacao--;
@@ -241,9 +239,11 @@ public abstract class InkConverter {
 						if(txtFinalSentenca.equals("")) {
 							int cenaLoopIndex = -1;
 							for(int i = 0; i < listaDeCenasObsInk.size(); i++) {
-								if(listaDeCenasObsInk.get(i).getId() == cena.getId()) {
-									cenaLoopIndex = i;
-									break;
+								if(cena != null) {
+									if (listaDeCenasObsInk.get(i).getId() == cena.getId()) {
+										cenaLoopIndex = i;
+										break;
+									}
 								}
 							}
 							
@@ -286,7 +286,7 @@ public abstract class InkConverter {
 							bufferedWriter.write(txtFinalSentenca);
 							bufferedWriter.newLine();
 						}else {
-							txtFinalSentenca = indentacao(qtdDeIndentacao) + "* [Próxima Cena]";
+							txtFinalSentenca = indentacao(qtdDeIndentacao) + "* [PrÃ³xima Cena]";
 							bufferedWriter.write(txtFinalSentenca);
 							bufferedWriter.newLine();
 							qtdDeIndentacao--;
@@ -297,9 +297,11 @@ public abstract class InkConverter {
 				if(txtFinalSentenca.equals("")) {
 					int cenaLoopIndex = -1;
 					for(int i = 0; i < listaDeCenasObsInk.size(); i++) {
-						if(listaDeCenasObsInk.get(i).getId() == cena.getId()) {
-							cenaLoopIndex = i;
-							break;
+						if(cena != null) {
+							if (listaDeCenasObsInk.get(i).getId() == cena.getId()) {
+								cenaLoopIndex = i;
+								break;
+							}
 						}
 					}
 					
@@ -360,18 +362,22 @@ public abstract class InkConverter {
 				int countCena = cenasEncontradas.size() - 1;
 				while (countCena >= 0) {
 					Cena cena = cenasEncontradas.get(countCena);
-					listaDesentencasJaEscritas.add(cena.getId());
-					processarCena(cena, bufferedWriter, qtdDeIndentacao, false, false);
-					countCena--;
+					if(cena != null) {
+						listaDesentencasJaEscritas.add(cena.getId());
+						processarCena(cena, bufferedWriter, qtdDeIndentacao, false, false);
+						countCena--;
+					}
 				}
 			}else {
 				if(sentenca.getCena().getAto() != 3) {
 					int countCena = 0;
 					while (countCena < cenasEncontradas.size()) {
 						Cena cena = cenasEncontradas.get(countCena);
-						listaDesentencasJaEscritas.add(cena.getId());					
-						processarCena(cena, bufferedWriter, qtdDeIndentacao, false, false);				
-						countCena++;
+						if(cena != null) {
+							listaDesentencasJaEscritas.add(cena.getId());
+							processarCena(cena, bufferedWriter, qtdDeIndentacao, false, false);
+							countCena++;
+						}
 					}
 				}
 			}
@@ -389,204 +395,218 @@ public abstract class InkConverter {
 			String textoSentenca = "";			
 			
 			Cena cena = sentenca.getCena();
-			
-			// Verificar primeiro se a sentença já foi escrita
-			if (sentencaJaFoiEscrita(cena.getId())) {
 
-				//textoSentenca = indentacao(qtdDeIndentacao) + "-> " + removerAcentos(cena.getTitulo());
-				//bufferedWriter.write(textoSentenca);
-				//bufferedWriter.newLine();
+			if(cena != null) {
 
-			} else {
-				listaDesentencasJaEscritas.add(cena.getId());
-				
-				List<RelacaoSentencas> mapeamentoDasProximasSentencas = new SentencaDao()
-						.buscarProximasSentencas(sentenca);
+				// Verificar primeiro se a sentenï¿½a jï¿½ foi escrita
+				if (sentencaJaFoiEscrita(cena.getId())) {
 
-				if (!sentenca.getTipoDeElementoBPMN().contains("Gateway")
-						&& mapeamentoDasProximasSentencas.size() <= 1) {
-					
-					if(isPrimeiraSentenca) {
-						if(cena.getSentenca() != null) {
-							processarCenasExtras(cena.getSentenca(), bufferedWriter, qtdDeIndentacao, true);
-						}				
-					}
-					
-					processarCena(cena, bufferedWriter, qtdDeIndentacao, isPrimeiraSentenca, false);
-
-					if(cena.getSentenca() != null && cena.getAto() != 3) {
-						processarCenasExtras(cena.getSentenca(), bufferedWriter, qtdDeIndentacao, false);
-					}
-					
-					if (!sentenca.getTipoDeElementoBPMN().equals(TipoDeElementoEnum.EVENTO_FINAL.getTipo())) {
-
-						if (sentenca.isTerminoDeParalelismo()) {
-
-							for (String texto : textoFinal) {
-								bufferedWriter.write(texto);
-								bufferedWriter.newLine();
-							}
-							textoSentenca = 
-									"-> " + removerAcentos(indentacao(qtdDeIndentacao) + mapeamentoDasProximasSentencas
-											.iterator().next().getSentencaFilha().getCena().getTitulo());
-							bufferedWriter.write(textoSentenca);
-							bufferedWriter.newLine();
-
-						} else {
-
-							escreverCenasDaListaB(
-									mapeamentoDasProximasSentencas.iterator().next().getSentencaFilha(), bufferedWriter,
-									qtdDeIndentacao, rota, false);
-
-						}
-					}
+					//textoSentenca = indentacao(qtdDeIndentacao) + "-> " + removerAcentos(cena.getTitulo());
+					//bufferedWriter.write(textoSentenca);
+					//bufferedWriter.newLine();
 
 				} else {
+					listaDesentencasJaEscritas.add(cena.getId());
 
-					if (sentenca.getTipoDeElementoBPMN().equals(TipoDeElementoEnum.GATEWAY_EXCLUSIVO.getTipo())
-							|| (!sentenca.getTipoDeElementoBPMN().contains("Gateway")
-									&& mapeamentoDasProximasSentencas.size() > 1)) {
-						
-						processarCena(sentenca.getCena(), bufferedWriter, qtdDeIndentacao, false, false);
+					List<RelacaoSentencas> mapeamentoDasProximasSentencas = new SentencaDao()
+							.buscarProximasSentencas(sentenca);
 
-						qtdDeIndentacao++;
+					if (sentenca.getTipoDeElementoBPMN() != null && !sentenca.getTipoDeElementoBPMN().contains("Gateway")
+							&& mapeamentoDasProximasSentencas.size() <= 1) {
 
-						for (RelacaoSentencas relacaoSentencas : mapeamentoDasProximasSentencas) {
-							
-							textoSentenca = indentacao(qtdDeIndentacao) + "+ [";
-							bufferedWriter.write(textoSentenca);
-							if (relacaoSentencas.getNomeOpcao() == null || relacaoSentencas.getNomeOpcao().trim().equals("")) {
-								rota++;
-								textoSentenca = "Rota" + String.valueOf(rota);
+						if (isPrimeiraSentenca) {
+							if (cena.getSentenca() != null) {
+								processarCenasExtras(cena.getSentenca(), bufferedWriter, qtdDeIndentacao, true);
+							}
+						}
+
+						processarCena(cena, bufferedWriter, qtdDeIndentacao, isPrimeiraSentenca, false);
+
+						if (cena.getSentenca() != null && cena.getAto() != 3) {
+							processarCenasExtras(cena.getSentenca(), bufferedWriter, qtdDeIndentacao, false);
+						}
+
+						if (sentenca.getTipoDeElementoBPMN() != null && !sentenca.getTipoDeElementoBPMN().equals(TipoDeElementoEnum.EVENTO_FINAL.getTipo())) {
+
+							if (sentenca.isTerminoDeParalelismo()) {
+
+								for (String texto : textoFinal) {
+									bufferedWriter.write(texto);
+									bufferedWriter.newLine();
+								}
+								textoSentenca =
+										"-> " + removerAcentos(indentacao(qtdDeIndentacao) + mapeamentoDasProximasSentencas
+												.iterator().next().getSentencaFilha().getCena().getTitulo());
 								bufferedWriter.write(textoSentenca);
+								bufferedWriter.newLine();
+
 							} else {
+
+								escreverCenasDaListaB(
+										mapeamentoDasProximasSentencas.iterator().next().getSentencaFilha(), bufferedWriter,
+										qtdDeIndentacao, rota, false);
+
+							}
+						}
+
+					} else {
+
+						if (sentenca.getTipoDeElementoBPMN() != null) {
+							if (sentenca.getTipoDeElementoBPMN().equals(TipoDeElementoEnum.GATEWAY_EXCLUSIVO.getTipo())
+									|| (!sentenca.getTipoDeElementoBPMN().contains("Gateway")
+									&& mapeamentoDasProximasSentencas.size() > 1)) {
+
+								processarCena(sentenca.getCena(), bufferedWriter, qtdDeIndentacao, false, false);
+
+								qtdDeIndentacao++;
+
+								for (RelacaoSentencas relacaoSentencas : mapeamentoDasProximasSentencas) {
+
+									textoSentenca = indentacao(qtdDeIndentacao) + "+ [";
+									bufferedWriter.write(textoSentenca);
+									if (relacaoSentencas.getNomeOpcao() == null || relacaoSentencas.getNomeOpcao().trim().equals("")) {
+										rota++;
+										textoSentenca = "Rota" + String.valueOf(rota);
+										bufferedWriter.write(textoSentenca);
+									} else {
+										textoSentenca = relacaoSentencas.getNomeOpcao();
+										bufferedWriter.write(textoSentenca);
+									}
+									bufferedWriter.write("]");
+									bufferedWriter.newLine();
+									qtdDeIndentacao++;
+
+									Sentenca proximaSentenca = relacaoSentencas.getSentencaFilha();
+
+									if(proximaSentenca.getCena() != null && !proximaSentenca.getCena().getSentenca().isNaoVaiTerCena()) {
+										textoSentenca = indentacao(qtdDeIndentacao) + "-> "
+												+ removerAcentos(proximaSentenca.getCena().getTitulo());
+										bufferedWriter.write(textoSentenca);
+										bufferedWriter.newLine();
+									}
+
+									qtdDeIndentacao--;
+								}
+								qtdDeIndentacao--;
+
+								for (RelacaoSentencas relacaoSentencas : mapeamentoDasProximasSentencas) {
+									bufferedWriter.newLine();
+
+									Sentenca proximaSentenca = relacaoSentencas.getSentencaFilha();
+
+									escreverProximaCena(bufferedWriter, qtdDeIndentacao, rota, proximaSentenca);
+								}
+
+							}
+						}
+
+						if (sentenca.getTipoDeElementoBPMN() != null && sentenca.getTipoDeElementoBPMN().equals(TipoDeElementoEnum.GATEWAY_PARALELO.getTipo())) {
+
+							rota++;
+							gatewaysParalelosEscritos++;
+
+							textoSentenca = indentacao(qtdDeIndentacao) + "=== " + removerAcentos(sentenca.getCena().getTitulo());
+							bufferedWriter.write(textoSentenca);
+							bufferedWriter.newLine();
+
+							textoSentenca =
+									indentacao(qtdDeIndentacao) + "~ gtPar" + String.valueOf(gatewaysParalelosEscritos)
+											+ " = gtPar" + String.valueOf(gatewaysParalelosEscritos) + " + 1";
+							bufferedWriter.write(textoSentenca);
+							bufferedWriter.newLine();
+
+							String rotaIniciada = "Rota" + String.valueOf(rota) + "Iniciada";
+							String rotaFinalizada = "Rota" + String.valueOf(rota) + "Finalizada";
+
+							textoSentenca = indentacao(qtdDeIndentacao) + "-> " + rotaIniciada;
+							bufferedWriter.write(textoSentenca);
+							bufferedWriter.newLine();
+
+							textoSentenca = indentacao(qtdDeIndentacao) + "=== " + rotaIniciada;
+							bufferedWriter.write(textoSentenca);
+							bufferedWriter.newLine();
+
+							qtdDeIndentacao++;
+
+							Sentenca proximaSentenca = new Sentenca();
+
+							for (RelacaoSentencas relacaoSentencas : mapeamentoDasProximasSentencas) {
+								textoSentenca = indentacao(qtdDeIndentacao) + "* [";
+								bufferedWriter.write(textoSentenca);
 								textoSentenca = relacaoSentencas.getNomeOpcao();
 								bufferedWriter.write(textoSentenca);
+								bufferedWriter.write("]");
+								bufferedWriter.newLine();
+								qtdDeIndentacao++;
+
+								proximaSentenca = relacaoSentencas.getSentencaFilha();
+
+								textoSentenca = indentacao(qtdDeIndentacao) + "-> "
+										+ removerAcentos(proximaSentenca.getCena().getTitulo());
+								bufferedWriter.write(textoSentenca);
+								bufferedWriter.newLine();
+
+								qtdDeIndentacao--;
 							}
-							bufferedWriter.write("]");
-							bufferedWriter.newLine();
-							qtdDeIndentacao++;
-
-							Sentenca proximaSentenca = relacaoSentencas.getSentencaFilha();
-
-							textoSentenca = indentacao(qtdDeIndentacao) + "-> "
-									+ removerAcentos(proximaSentenca.getCena().getTitulo());
-							bufferedWriter.write(textoSentenca);
-							bufferedWriter.newLine();
-
 							qtdDeIndentacao--;
-						}
-						qtdDeIndentacao--;
 
-						for (RelacaoSentencas relacaoSentencas : mapeamentoDasProximasSentencas) {
-							bufferedWriter.newLine();
-
-							Sentenca proximaSentenca = relacaoSentencas.getSentencaFilha();
-
-							escreverProximaCena(bufferedWriter, qtdDeIndentacao, rota, proximaSentenca);
-						}
-
-					}
-
-					if (sentenca.getTipoDeElementoBPMN().equals(TipoDeElementoEnum.GATEWAY_PARALELO.getTipo())) {
-
-						rota++;
-						gatewaysParalelosEscritos++;
-
-						textoSentenca = indentacao(qtdDeIndentacao) + "=== " + removerAcentos(sentenca.getCena().getTitulo());
-						bufferedWriter.write(textoSentenca);
-						bufferedWriter.newLine();
-						
-						textoSentenca =
-								indentacao(qtdDeIndentacao) + "~ gtPar" + String.valueOf(gatewaysParalelosEscritos)
-								+ " = gtPar" + String.valueOf(gatewaysParalelosEscritos) + " + 1";
-						bufferedWriter.write(textoSentenca);
-						bufferedWriter.newLine();
-
-						String rotaIniciada = "Rota" + String.valueOf(rota) + "Iniciada";
-						String rotaFinalizada = "Rota" + String.valueOf(rota) + "Finalizada";
-
-						textoSentenca = indentacao(qtdDeIndentacao) + "-> " + rotaIniciada;
-						bufferedWriter.write(textoSentenca);
-						bufferedWriter.newLine();
-						
-						textoSentenca = indentacao(qtdDeIndentacao) + "=== " + rotaIniciada;
-						bufferedWriter.write(textoSentenca);
-						bufferedWriter.newLine();
-
-						qtdDeIndentacao++;
-
-						Sentenca proximaSentenca = new Sentenca();
-
-						for (RelacaoSentencas relacaoSentencas : mapeamentoDasProximasSentencas) {
-							textoSentenca = indentacao(qtdDeIndentacao) + "* [";
-							bufferedWriter.write(textoSentenca);
-							textoSentenca = relacaoSentencas.getNomeOpcao();
-							bufferedWriter.write(textoSentenca);
-							bufferedWriter.write("]");
-							bufferedWriter.newLine();
-							qtdDeIndentacao++;
-
-							proximaSentenca = relacaoSentencas.getSentencaFilha();
-
-							textoSentenca = indentacao(qtdDeIndentacao) + "-> "
-									+ removerAcentos(proximaSentenca.getCena().getTitulo());
+							textoSentenca = indentacao(qtdDeIndentacao) + "* -> " + rotaFinalizada;
 							bufferedWriter.write(textoSentenca);
 							bufferedWriter.newLine();
 
-							qtdDeIndentacao--;
-						}
-						qtdDeIndentacao--;
-
-						textoSentenca = indentacao(qtdDeIndentacao) + "* -> " + rotaFinalizada;
-						bufferedWriter.write(textoSentenca);
-						bufferedWriter.newLine();
-
-						textoSentenca = indentacao(qtdDeIndentacao) + "=== " + rotaFinalizada;
-						bufferedWriter.write(textoSentenca);
-						bufferedWriter.newLine();
-
-						textoSentenca = 
-								indentacao(qtdDeIndentacao) + "~ gtPar" + String.valueOf(gatewaysParalelosEscritos)
-								+ " = gtPar" + String.valueOf(gatewaysParalelosEscritos) + " - 1";
-						bufferedWriter.write(textoSentenca);
-						bufferedWriter.newLine();
-
-						textoFinal.add("{ gtPar" + String.valueOf(gatewaysParalelosEscritos) + " > 0:");
-						textoFinal.add(indentacao(1) + "-> " + rotaIniciada);
-						textoFinal.add("}");
-
-						Sentenca sequenciaDoParalelismo = getSequenciaDoParalelismo(proximaSentenca);
-
-						if (sequenciaDoParalelismo != null && sequenciaDoParalelismo.getId() > 0) {
-
-							textoSentenca = indentacao(qtdDeIndentacao) + "-> "
-									+ removerAcentos(sequenciaDoParalelismo.getCena().getTitulo());
+							textoSentenca = indentacao(qtdDeIndentacao) + "=== " + rotaFinalizada;
 							bufferedWriter.write(textoSentenca);
 							bufferedWriter.newLine();
 
-							escreverProximaCena(bufferedWriter, qtdDeIndentacao, rota, sequenciaDoParalelismo);
-
-						} else {
-							textoSentenca = indentacao(qtdDeIndentacao) + "-> Fim";
+							textoSentenca =
+									indentacao(qtdDeIndentacao) + "~ gtPar" + String.valueOf(gatewaysParalelosEscritos)
+											+ " = gtPar" + String.valueOf(gatewaysParalelosEscritos) + " - 1";
 							bufferedWriter.write(textoSentenca);
 							bufferedWriter.newLine();
-						}
 
-						for (RelacaoSentencas relacaoSentencas : mapeamentoDasProximasSentencas) {
+							textoFinal.add("{ gtPar" + String.valueOf(gatewaysParalelosEscritos) + " > 0:");
+							textoFinal.add(indentacao(1) + "-> " + rotaIniciada);
+							textoFinal.add("}");
 
-							bufferedWriter.newLine();
+							Sentenca sequenciaDoParalelismo = getSequenciaDoParalelismo(proximaSentenca);
 
-							proximaSentenca = relacaoSentencas.getSentencaFilha();
+							if (sequenciaDoParalelismo != null && sequenciaDoParalelismo.getId() > 0) {
 
-							escreverProximaCena(bufferedWriter, qtdDeIndentacao, rota, proximaSentenca);
+								textoSentenca = indentacao(qtdDeIndentacao) + "-> "
+										+ removerAcentos(sequenciaDoParalelismo.getCena().getTitulo());
+								bufferedWriter.write(textoSentenca);
+								bufferedWriter.newLine();
+
+								escreverProximaCena(bufferedWriter, qtdDeIndentacao, rota, sequenciaDoParalelismo);
+
+							} else {
+								textoSentenca = indentacao(qtdDeIndentacao) + "-> Fim";
+								bufferedWriter.write(textoSentenca);
+								bufferedWriter.newLine();
+							}
+
+							for (RelacaoSentencas relacaoSentencas : mapeamentoDasProximasSentencas) {
+
+								bufferedWriter.newLine();
+
+								proximaSentenca = relacaoSentencas.getSentencaFilha();
+
+								escreverProximaCena(bufferedWriter, qtdDeIndentacao, rota, proximaSentenca);
+
+							}
 
 						}
 
 					}
 
 				}
+			}else{
+				List<RelacaoSentencas> mapeamentoDasProximasSentencas = new SentencaDao()
+						.buscarProximasSentencas(sentenca);
 
+				escreverCenasDaListaB(
+						mapeamentoDasProximasSentencas.iterator().next().getSentencaFilha(), bufferedWriter,
+						qtdDeIndentacao, rota, false);
 			}
 
 		} catch (IOException e) {
@@ -601,7 +621,7 @@ public abstract class InkConverter {
 		try {
 			String textoSentenca = "";
 			
-			// Verificar primeiro se a sentença já foi escrita
+			// Verificar primeiro se a sentenï¿½a jï¿½ foi escrita
 			if (sentencaJaFoiEscrita(sentenca.getId())) {
 
 				textoSentenca = indentacao(qtdDeIndentacao) + "-> " + removerAcentos(sentenca.getComplementos());
@@ -615,8 +635,8 @@ public abstract class InkConverter {
 				List<RelacaoSentencas> mapeamentoDasProximasSentencas = new SentencaDao()
 						.buscarProximasSentencas(sentenca);
 
-				if (!sentenca.getTipoDeElementoBPMN().contains("Gateway")
-						&& mapeamentoDasProximasSentencas.size() <= 1) {
+				if ((sentenca.getTipoDeElementoBPMN() != null) && (!sentenca.getTipoDeElementoBPMN().contains("Gateway"))
+						&& (mapeamentoDasProximasSentencas.size() <= 1)) {
 
 					if (sentenca.isTemLoop()) {
 						bufferedWriter.newLine();
@@ -665,65 +685,68 @@ public abstract class InkConverter {
 
 				} else {
 
-					if (sentenca.getTipoDeElementoBPMN().equals(TipoDeElementoEnum.GATEWAY_EXCLUSIVO.getTipo())
-							|| (!sentenca.getTipoDeElementoBPMN().contains("Gateway")
-									&& mapeamentoDasProximasSentencas.size() > 1)) {
+					if(sentenca.getTipoDeElementoBPMN() != null) {
 
-						if (sentenca.isTemLoop()) {
-							bufferedWriter.newLine();
-							textoSentenca = indentacao(qtdDeIndentacao) + "-> " + removerAcentos(sentenca.getComplementos());
-							bufferedWriter.write(textoSentenca);
-							bufferedWriter.newLine();
-							
-							textoSentenca = indentacao(qtdDeIndentacao) + "=== " + removerAcentos(sentenca.getComplementos());
-							bufferedWriter.write(textoSentenca);
-							bufferedWriter.newLine();
-						}
+						if (sentenca.getTipoDeElementoBPMN().equals(TipoDeElementoEnum.GATEWAY_EXCLUSIVO.getTipo())
+								|| (!sentenca.getTipoDeElementoBPMN().contains("Gateway")
+								&& mapeamentoDasProximasSentencas.size() > 1)) {
 
-						textoSentenca = indentacao(qtdDeIndentacao) + sentenca.getSentencaCompleta();					
-						bufferedWriter.write(textoSentenca);
-						bufferedWriter.newLine();
-
-						qtdDeIndentacao++;
-
-						for (RelacaoSentencas relacaoSentencas : mapeamentoDasProximasSentencas) {
-							
-							textoSentenca = indentacao(qtdDeIndentacao) + "+ [";
-							bufferedWriter.write(textoSentenca);
-							if (relacaoSentencas.getNomeOpcao() == null || relacaoSentencas.getNomeOpcao().trim().equals("")) {
-								rota++;
-								textoSentenca = "Rota" + String.valueOf(rota);
+							if (sentenca.isTemLoop()) {
+								bufferedWriter.newLine();
+								textoSentenca = indentacao(qtdDeIndentacao) + "-> " + removerAcentos(sentenca.getComplementos());
 								bufferedWriter.write(textoSentenca);
-							} else {
-								textoSentenca = relacaoSentencas.getNomeOpcao();
+								bufferedWriter.newLine();
+
+								textoSentenca = indentacao(qtdDeIndentacao) + "=== " + removerAcentos(sentenca.getComplementos());
 								bufferedWriter.write(textoSentenca);
+								bufferedWriter.newLine();
 							}
-							bufferedWriter.write("]");
+
+							textoSentenca = indentacao(qtdDeIndentacao) + sentenca.getSentencaCompleta();
+							bufferedWriter.write(textoSentenca);
 							bufferedWriter.newLine();
+
 							qtdDeIndentacao++;
 
-							Sentenca proximaSentenca = relacaoSentencas.getSentencaFilha();
+							for (RelacaoSentencas relacaoSentencas : mapeamentoDasProximasSentencas) {
 
-							textoSentenca = indentacao(qtdDeIndentacao) + "-> "
-									+ removerAcentos(proximaSentenca.getComplementos());
-							bufferedWriter.write(textoSentenca);
-							bufferedWriter.newLine();
+								textoSentenca = indentacao(qtdDeIndentacao) + "+ [";
+								bufferedWriter.write(textoSentenca);
+								if (relacaoSentencas.getNomeOpcao() == null || relacaoSentencas.getNomeOpcao().trim().equals("")) {
+									rota++;
+									textoSentenca = "Rota" + String.valueOf(rota);
+									bufferedWriter.write(textoSentenca);
+								} else {
+									textoSentenca = relacaoSentencas.getNomeOpcao();
+									bufferedWriter.write(textoSentenca);
+								}
+								bufferedWriter.write("]");
+								bufferedWriter.newLine();
+								qtdDeIndentacao++;
 
+								Sentenca proximaSentenca = relacaoSentencas.getSentencaFilha();
+
+								textoSentenca = indentacao(qtdDeIndentacao) + "-> "
+										+ removerAcentos(proximaSentenca.getComplementos());
+								bufferedWriter.write(textoSentenca);
+								bufferedWriter.newLine();
+
+								qtdDeIndentacao--;
+							}
 							qtdDeIndentacao--;
+
+							for (RelacaoSentencas relacaoSentencas : mapeamentoDasProximasSentencas) {
+								bufferedWriter.newLine();
+
+								Sentenca proximaSentenca = relacaoSentencas.getSentencaFilha();
+
+								escreverProximaSentenca(bufferedWriter, qtdDeIndentacao, rota, proximaSentenca);
+							}
+
 						}
-						qtdDeIndentacao--;
-
-						for (RelacaoSentencas relacaoSentencas : mapeamentoDasProximasSentencas) {
-							bufferedWriter.newLine();
-
-							Sentenca proximaSentenca = relacaoSentencas.getSentencaFilha();
-
-							escreverProximaSentenca(bufferedWriter, qtdDeIndentacao, rota, proximaSentenca);
-						}
-
 					}
 
-					if (sentenca.getTipoDeElementoBPMN().equals(TipoDeElementoEnum.GATEWAY_PARALELO.getTipo())) {
+					if (sentenca.getTipoDeElementoBPMN() != null && sentenca.getTipoDeElementoBPMN().equals(TipoDeElementoEnum.GATEWAY_PARALELO.getTipo())) {
 
 						rota++;
 						gatewaysParalelosEscritos++;
@@ -861,8 +884,10 @@ public abstract class InkConverter {
 
 	public static void escreverProximaCena(BufferedWriter bufferedWriter, int qtdDeIndentacao, int rota,
 			Sentenca proximaSentenca) throws IOException {
-		if (!sentencaJaFoiEscrita(proximaSentenca.getCena().getId())) {
-			escreverCenasDaListaB(proximaSentenca, bufferedWriter, qtdDeIndentacao, rota, false);
+		if(proximaSentenca.getCena() != null) {
+			if (!sentencaJaFoiEscrita(proximaSentenca.getCena().getId())) {
+				escreverCenasDaListaB(proximaSentenca, bufferedWriter, qtdDeIndentacao, rota, false);
+			}
 		}
 	}
 	
@@ -886,7 +911,7 @@ public abstract class InkConverter {
 		try {
 			String textoCena = "";
 			
-			// Se for evento final significa que é uma ultima cena
+			// Se for evento final significa que ï¿½ uma ultima cena
 			if (cena.getSentenca() != null && cena.getSentenca().getTipoDeElementoBPMN()
 			.equals(TipoDeElementoEnum.EVENTO_FINAL.getTipo())) {
 				ultimaCena = true;
@@ -935,13 +960,13 @@ public abstract class InkConverter {
 				bufferedWriter.newLine();
 			}
 
-			// Descrição breve da cena
+			// Descriï¿½ï¿½o breve da cena
 			if (cena.getDescricaoBreve() != null && cena.getDescricaoBreve().length() > 1) {
-				bufferedWriter.write(indentacao(qtdDeIndentacao) + "Descrição da Cena: " + cena.getDescricaoBreve());
+				bufferedWriter.write(indentacao(qtdDeIndentacao) + "DescriÃ§Ã£o da Cena: " + cena.getDescricaoBreve());
 				bufferedWriter.newLine();
 			}
 
-			// Diálogos da cena
+			// Diï¿½logos da cena
 			List<Dialogo> dialogos = new DialogoDao().buscarPorCena(cena);
 			if (dialogos != null && dialogos.size() > 0) {
 				for (Dialogo dialogo : dialogos) {
@@ -1057,16 +1082,16 @@ public abstract class InkConverter {
 
 			} else 
 
-				// Próxima cena, se houver
+				// Prï¿½xima cena, se houver
 				if (!ultimaCena) {
 					
 					if(loopScene == null) {
 						String obs = cena.getObservacaoInk();
 						if(obs == null) {
-							bufferedWriter.write(indentacao(qtdDeIndentacao) + "* [Próxima Cena]");
+							bufferedWriter.write(indentacao(qtdDeIndentacao) + "* [PrÃ³xima Cena]");
 						}else {
 							if(obs.trim().equals("")) {
-								bufferedWriter.write(indentacao(qtdDeIndentacao) + "* [Próxima Cena]");
+								bufferedWriter.write(indentacao(qtdDeIndentacao) + "* [PrÃ³xima Cena]");
 							}else {
 								bufferedWriter.write(indentacao(qtdDeIndentacao) + cena.getObservacaoInk());
 							}							
@@ -1077,7 +1102,7 @@ public abstract class InkConverter {
 					qtdDeIndentacao--;
 				}
 	
-				// Se não houver
+				// Se nï¿½o houver
 				else {
 					qtdDeIndentacao--;
 					bufferedWriter.write(indentacao(qtdDeIndentacao) + "-> END");

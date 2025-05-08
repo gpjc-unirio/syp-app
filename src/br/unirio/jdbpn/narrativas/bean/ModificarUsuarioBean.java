@@ -57,7 +57,7 @@ public class ModificarUsuarioBean implements Serializable {
 
 	public void selecionarUsuario() {
 		if (usuario != null) {
-			System.out.println("Usuário selecionado: " + usuario.getNomeUsuario());
+			System.out.println("UsuÃ¡rio selecionado: " + usuario.getNomeUsuario());
 		}
 	}
 
@@ -68,28 +68,28 @@ public class ModificarUsuarioBean implements Serializable {
 			context.getExternalContext().getFlash().setKeepMessages(true);
 
 			context.addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_WARN, "Falha", "Nenhum usuário selecionado"));
+					new FacesMessage(FacesMessage.SEVERITY_WARN, "Falha", "Nenhum usuÃ¡rio selecionado"));
 
 			return "modificarUsuario?faces-redirect=true";
 
 		} else {
 
 			try {
-				System.out.println("Gravando usuário [" + this.usuario.getNomeUsuario() + "]");
+				System.out.println("Gravando usuÃ¡rio [" + this.usuario.getNomeUsuario() + "]");
 
 				new DAO<Usuario>(Usuario.class).atualiza(usuario);
 				this.usuario = new Usuario();
 
 				context.getExternalContext().getFlash().setKeepMessages(true);
 				context.addMessage(null,
-						new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso", "Usuário atualizado com sucesso"));
+						new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso", "UsuÃ¡rio atualizado com sucesso"));
 
 				return "modificarUsuario?faces-redirect=true";
 
 			} catch (Exception e) {
 				context.getExternalContext().getFlash().setKeepMessages(true);
 				context.addMessage(null,
-						new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Falha no cadastro de usuário"));
+						new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Falha no cadastro de usuÃ¡rio"));
 				e.printStackTrace();
 
 				return "modificarUsuario?faces-redirect=true";

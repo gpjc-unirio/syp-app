@@ -152,7 +152,7 @@ public class SentencaBean implements Serializable {
 			});;
 		}
 
-		// Atualização do log / contador de tempo
+		// Atualizacoo do log / contador de tempo
 		if (this.viewName.equals("importarBPMN")) {
 			registrarLog(LogInfoEnum.ACAO_IMPORTAR_DIAGRAMA_BPMN, LogInfoEnum.TIPO_ENTRADA);
 		}
@@ -175,7 +175,7 @@ public class SentencaBean implements Serializable {
 
 		boolean sentencaLocalizada = false;
 
-		// Identificar a sentença a partir do Id do elemento BPMN
+		// Identificar a sentenca a partir do Id do elemento BPMN
 		for (Sentenca sentencaDoProjeto : listaDeSentencasDoProjeto) {
 			if (sentencaDoProjeto.getElementoBpmnId().equals(sentenca.getElementoBpmnId())) {
 				this.sentenca = sentencaDoProjeto;
@@ -208,11 +208,11 @@ public class SentencaBean implements Serializable {
 
 				List<Sentenca> listaDeSentencasDoBanco = getListaDeSentencasDoProjeto();
 
-				// Se as sentenças já foram cadastradas anteriormente, tem que apagá-las antes
+				// Se as sentencas ja foram cadastradas anteriormente, tem que apaga-las antes
 				if (listaDeSentencasDoBanco != null) {
 					for (Sentenca sentenca : listaDeSentencasDoBanco) {
 
-						// Tem que remover todas as relações antes
+						// Tem que remover todas as relacoes antes
 						List<RelacaoSentencas> todasAsRelacoesDaSentenca = new SentencaDao()
 								.buscarProximasSentencas(sentenca);
 
@@ -228,7 +228,7 @@ public class SentencaBean implements Serializable {
 					}
 				}
 
-				// Gerar as sentenças
+				// Gerar as sentencas
 				BpmnParaSentencas.gravarSentencas(arquivoBpmn.getInputStream(), projeto);
 
 				// Salvar o arquivo BPMN
@@ -242,14 +242,14 @@ public class SentencaBean implements Serializable {
 				projeto.setStatus(StatusProjetoEnum.STATUS_AVALIACAO_SENTENCAS.getStatus());
 				new DAO<Projeto>(Projeto.class).atualiza(projeto);
 
-				// Atualização do log / contador de tempo
+				// Atualizacao do log / contador de tempo
 				registrarLog(LogInfoEnum.ACAO_IMPORTAR_DIAGRAMA_BPMN, LogInfoEnum.TIPO_SAIDA);
 
 			} catch (Exception e) {
 
 				context.getExternalContext().getFlash().setKeepMessages(true);
-				FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Inconsistência em diagrama",
-						"O diagrama BPMN apresenta alguma inconsistência e não pode ser carregado. Causa: "
+				FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "InconsistÃªncia em diagrama",
+						"O diagrama BPMN apresenta alguma inconsistÃªncia e nÃ£o pode ser carregado. Causa: "
 								+ e.getLocalizedMessage());
 				context.addMessage(null, message);
 				e.printStackTrace();
@@ -277,7 +277,7 @@ public class SentencaBean implements Serializable {
 
 		new DAO<Sentenca>(Sentenca.class).atualiza(sentenca);
 
-		// Atualização do log / contador de tempo
+		// Atualizaï¿½cao do log / contador de tempo
 		registrarLog(LogInfoEnum.ACAO_AJUSTAR_SENTENCAS, LogInfoEnum.TIPO_SAIDA);
 
 	}
@@ -287,32 +287,32 @@ public class SentencaBean implements Serializable {
 		Sentenca sentencaDescartada = new DAO<Sentenca>(Sentenca.class).buscaPorId(sentencaId);
 		FacesContext context = FacesContext.getCurrentInstance();
 
-		// Verificar se é possível descartar
+		// Verificar se e possivel descartar
 		if (SentencasParaCenas.isPossivelDescartarSentenca(sentencaDescartada)) {
-			// Se for possível, atualizar a sentença e ajustar as ordens das cenas
-			// posteriores já criadas
+			// Se for possivel, atualizar a sentenca e ajustar as ordens das cenas
+			// posteriores ja criadas
 
 			sentencaDescartada.setNaoVaiTerCena(true);
 			new DAO<Sentenca>(Sentenca.class).atualiza(sentencaDescartada);
 
 			SentencasParaCenas.atualizarOrdemDasProximasCenas(cenaOrdem, sentencaDescartada.getProjeto());
 
-			// Atualização do log / contador de tempo
+			// Atualizaï¿½ï¿½o do log / contador de tempo
 			registrarLog(LogInfoEnum.ACAO_CRIAR_CENA, LogInfoEnum.TIPO_SAIDA);
 
 			context.getExternalContext().getFlash().setKeepMessages(true);
-			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Sentença descartada",
-					"Sentença descartada com sucesso!");
+			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "SentenÃ§a descartada",
+					"SentenÃ§a descartada com sucesso!");
 			context.addMessage(null, message);
 
 			return "escolherSentencaParaCena?projetoId=" + this.projeto.getId() + "&faces-redirect=true";
 
 		} else {
-			// Se não for possível, retornar mensagem de erro.
+			// Se nï¿½o for possï¿½vel, retornar mensagem de erro.
 
 			context.getExternalContext().getFlash().setKeepMessages(true);
-			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Sentença não descartada",
-					"Não é possível descartar esta sentença!");
+			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "SentenÃ§a nÃ£o descartada",
+					"NÃ£o Ã© possÃ­vel descartar esta senten~Ã§a!");
 			context.addMessage(null, message);
 
 			return "escolherSentencaParaCena?projetoId=" + this.projeto.getId() + "&faces-redirect=true";
@@ -334,25 +334,25 @@ public class SentencaBean implements Serializable {
 		// Verificar se a cena adicional vai ser depois do gateway
 		if (vaiSerDepois && (tipoDeElementoBpmn.equals(TipoDeElementoEnum.GATEWAY_EXCLUSIVO.getTipo())
 				|| tipoDeElementoBpmn.equals(TipoDeElementoEnum.GATEWAY_PARALELO.getTipo()))) {
-			// Se for depois de gateway, retornar para mesma página com erro.
+			// Se for depois de gateway, retornar para mesma pï¿½gina com erro.
 
 			context.getExternalContext().getFlash().setKeepMessages(true);
-			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Não é possível adicionar cena",
-					"Não é possível adicionar cena após elemento do tipo gateway!");
+			FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "NÃ£o Ã© possÃ­vel adicionar cena",
+					"NÃ£o Ã© possÃ­vel adicionar cena apÃ³s elemento do tipo gateway!");
 			context.addMessage(null, message);
 
 			return "escolherSentencaParaCena?projetoId=" + this.projeto.getId() + "&faces-redirect=true";
 
 		} else {
-			// Se não for depois de gateway, ir para a tela de criação de cena.
+			// Se nï¿½o for depois de gateway, ir para a tela de criaï¿½ï¿½o de cena.
 
 			if (vaiSerDepois) {
-				// Se for depois, mandar como parâmetro a cenaPosterior
+				// Se for depois, mandar como parï¿½metro a cenaPosterior
 
 				return "comporCena?cenaAnteriorId=" + cenaId + "&faces-redirect=true";
 
 			} else {
-				// Se for antes, mandar como parâmetro a cenaAnterior
+				// Se for antes, mandar como parï¿½metro a cenaAnterior
 
 				return "comporCena?cenaPosteriorId=" + cenaId + "&faces-redirect=true";
 

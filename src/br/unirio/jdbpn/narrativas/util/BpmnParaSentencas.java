@@ -33,24 +33,24 @@ public abstract class BpmnParaSentencas {
 
 	private static BpmnModelInstance modelInstance;
 
-	// Inteiro incremental para o atributo número dos objetos da classe Sentença
+	// Inteiro incremental para o atributo numero dos objetos da classe Sentenï¿½a
 	private static int numero;
 
-	// Objeto para armazenar os IDs dos elementos (oriundos do arquivo BPMN) que já
-	// foram "convertidos" em sentenças, para evitar duplicação de sentenças
+	// Objeto para armazenar os IDs dos elementos (oriundos do arquivo BPMN) que jÃ¡
+	// foram "convertidos" em sentenï¿½as, para evitar duplicaÃ§Ã£o de sentenï¿½as
 	private static List<String> listaDeElementosMapeados;
 
-	// HashMap para fazer a associação entre uma sentença gerada e o seu elemento
+	// HashMap para fazer a associaÃ§Ã£oo entre uma sentenca gerada e o seu elemento
 	// correspondente no modelo BPMN
 	private static Map<String, Integer> correspondenciaEntreIdDaSentencaEIdDoBpmn;
 
-	// Inteiro incremental para contar quantas lanes estão sem nome e, assim quantas
-	// sentenças não têm referência para sujeito
+	// Inteiro incremental para contar quantas lanes estao sem nome e, assim quantas
+	// sentencas nao tem referencia para sujeito
 	private static int contagemDeLanesSemNome;
 
 	public static void gravarSentencas(InputStream arquivoBpmn, Projeto projeto) {
 
-		// Inicialização de todas as variáveis da classe
+		// InicializaÃ§Ã£o de todas as variaveis da classe
 		modelInstance = Bpmn.readModelFromStream(arquivoBpmn);
 		numero = 1;
 		listaDeElementosMapeados = new ArrayList<String>();
@@ -63,11 +63,11 @@ public abstract class BpmnParaSentencas {
 		FlowNode flowNode = (FlowNode) startEventInstances.iterator().next();
 		ElementoBpmn startEvent = new ElementoBpmn(flowNode);
 
-		// Iniciando método recursivo de geração das sentenças a partir do evento
+		// Iniciando mï¿½todo recursivo de geraï¿½ï¿½o das sentenï¿½as a partir do evento
 		// inicial
 		registrarSentenca(startEvent, projeto);
 
-		// Eliminando alocação de memória do HashMap
+		// Eliminando alocaÃ§Ã£o de memoria do HashMap
 		correspondenciaEntreIdDaSentencaEIdDoBpmn.clear();
 
 	}
@@ -76,7 +76,7 @@ public abstract class BpmnParaSentencas {
 
 		String tipoDeElemento = elementoPai.getTipo().toLowerCase();
 
-		// Apenas os elementos do tipo evento, atividade e gateway geram as sentenças
+		// Apenas os elementos do tipo evento, atividade e gateway geram as sentenï¿½as
 		if (tipoDeElemento.contains("event") || tipoDeElemento.contains("task") || tipoDeElemento.contains("gateway")
 				|| tipoDeElemento.contains("subprocess")) {
 
@@ -84,8 +84,8 @@ public abstract class BpmnParaSentencas {
 			sentenca.setTemLoop(false);
 			sentenca.setTerminoDeParalelismo(false);
 
-			// Se o elemento ainda não foi mapeado, é preciso criar e definir os parâmetros
-			// da sentença correspondente.
+			// Se o elemento ainda nï¿½o foi mapeado, ï¿½ preciso criar e definir os parï¿½metros
+			// da sentenï¿½a correspondente.
 			if (!isElementoJaMapeado(elementoPai.getId())) {
 
 				listaDeElementosMapeados.add(elementoPai.getId());
@@ -121,7 +121,7 @@ public abstract class BpmnParaSentencas {
 
 				}
 
-				// Se for gateway, ele só escreve os complementos 02 e 03, se o 01 estiver vazio
+				// Se for gateway, ele sï¿½ escreve os complementos 02 e 03, se o 01 estiver vazio
 				if (tipoDeElemento.contains("gateway") && complementos.length() == 0) {
 					Collection<SequenceFlow> sequenceFlowCollection = elementoPai.getFlowNode().getOutgoing();
 					List<SequenceFlow> sequenceFlowList = new ArrayList<SequenceFlow>(sequenceFlowCollection);
@@ -131,14 +131,14 @@ public abstract class BpmnParaSentencas {
 						String complemento02 = sequenceFlowList.get(0).getName();
 
 						if (complemento02 == null || complemento02.length() == 0) {
-							complemento02 = "Opção 01";
+							complemento02 = "OpÃ§Ã£o 01";
 						}
 
 						String conectivo02 = "ou";
 						String complemento03 = sequenceFlowList.get(1).getName();
 
 						if (complemento03 == null || complemento03.length() == 0) {
-							complemento03 = "Opção 02";
+							complemento03 = "OpÃ§Ã£o 02";
 						}
 
 						complementos = definirComplementos(complementos, conectivo01, complemento02, conectivo02,
@@ -179,12 +179,12 @@ public abstract class BpmnParaSentencas {
 
 				correspondenciaEntreIdDaSentencaEIdDoBpmn.put(elementoPai.getId(), sentenca.getId());
 
-				// A partir daqui são verificados as próximas sentenças do fluxo do modelo BPMN.
-				// As próximas sentenças são se relacionam com as anteriores através da classe
+				// A partir daqui sï¿½o verificados as prï¿½ximas sentenï¿½as do fluxo do modelo BPMN.
+				// As prï¿½ximas sentenï¿½as sï¿½o se relacionam com as anteriores atravï¿½s da classe
 				// RelacaoSentencas.
 
-				// Se for gateway, há um tratamento diferente, porque é preciso ver as opções em
-				// descrição textual e relacionar esse texto com o elemento que vem na sequência
+				// Se for gateway, hï¿½ um tratamento diferente, porque ï¿½ preciso ver as opï¿½ï¿½es em
+				// descriï¿½ï¿½o textual e relacionar esse texto com o elemento que vem na sequï¿½ncia
 				if (tipoDeElemento.contains("gateway")) {
 
 					Collection<SequenceFlow> sequenceFlowList = elementoPai.getFlowNode().getOutgoing();
@@ -229,7 +229,7 @@ public abstract class BpmnParaSentencas {
 
 							Sentenca proximaSentenca = new Sentenca();
 
-							// Verifica se é um elemento de fusão de fluxos, porque se for não gera sentença
+							// Verifica se ï¿½ um elemento de fusï¿½o de fluxos, porque se for nï¿½o gera sentenï¿½a
 							if (isElementoGatewayDeFechamento(elemento)) {
 								sentenca.setTerminoDeParalelismo(true);
 								new DAO<Sentenca>(Sentenca.class).atualiza(sentenca);
@@ -262,7 +262,7 @@ public abstract class BpmnParaSentencas {
 
 				}
 
-				// Caso o elemento já tenha sido mapeado, basta "pegar" no banco de dados
+				// Caso o elemento jï¿½ tenha sido mapeado, basta "pegar" no banco de dados
 			} else {
 
 				sentenca = new DAO<Sentenca>(Sentenca.class).buscaPorId(getIdDaSentencaJaMapeada(elementoPai.getId()));
@@ -304,7 +304,7 @@ public abstract class BpmnParaSentencas {
 
 		String sujeito = "";
 
-		// Se for evento, o sujeito é o nome do processo
+		// Se for evento, o sujeito ï¿½ o nome do processo
 		if (tipoDeElemento.contains("event") && (tipoDeElemento.contains("start") || tipoDeElemento.contains("end"))) {
 			ModelElementType poolType = modelInstance.getModel().getType(Participant.class);
 			Collection<ModelElementInstance> poolInstances = modelInstance.getModelElementsByType(poolType);
@@ -315,8 +315,8 @@ public abstract class BpmnParaSentencas {
 		}
 
 		// Se for atividade:
-		// O sujeito da sentença é definido pelo texto descritivo da "raia ou lane" onde
-		// o elemento está contido.
+		// O sujeito da sentenï¿½a ï¿½ definido pelo texto descritivo da "raia ou lane" onde
+		// o elemento estï¿½ contido.
 		if (tipoDeElemento.contains("task")) {
 
 			ModelElementType laneType = modelInstance.getModel().getType(Lane.class);
@@ -356,8 +356,8 @@ public abstract class BpmnParaSentencas {
 
 	private static String getVerbo(ElementoBpmn elemento, String sujeito) {
 
-		// A definição do atributo "verbo" da Sentença é feita de acordo com o tipo de
-		// elemento BPMN que gerou a sentença, com o apoio da clase VerboSugeridoEnum.
+		// A definiï¿½ï¿½o do atributo "verbo" da Sentenï¿½a ï¿½ feita de acordo com o tipo de
+		// elemento BPMN que gerou a sentenï¿½a, com o apoio da clase VerboSugeridoEnum.
 
 		String tipoDoElemento = elemento.getTipo().toLowerCase();
 
@@ -438,8 +438,8 @@ public abstract class BpmnParaSentencas {
 
 	private static String getRecurso(ElementoBpmn elemento, Class<? extends ModelElementInstance> tipo) {
 
-		// Os elementos que estão associados a um recurso podem ser conectados a ele
-		// através de um objeto da classe DataInputAssociation ou DataOutpuAssociation
+		// Os elementos que estï¿½o associados a um recurso podem ser conectados a ele
+		// atravï¿½s de um objeto da classe DataInputAssociation ou DataOutpuAssociation
 
 		ModelElementType dataType = modelInstance.getModel().getType(tipo);
 		Class<? extends ModelElementInstance> classeSourceOrTarget;
@@ -451,7 +451,7 @@ public abstract class BpmnParaSentencas {
 			dataTypeList = elemento.getModelElementInstance().getChildElementsByType(dataType);
 		}
 
-		// A depender do tipo de associação com o elemento, a classe que contém o
+		// A depender do tipo de associaï¿½ï¿½o com o elemento, a classe que contï¿½m o
 		// elemento vai ser uma diferente.
 		if (tipo.getName().contains("Input")) {
 			classeSourceOrTarget = SourceRef.class;
@@ -461,8 +461,8 @@ public abstract class BpmnParaSentencas {
 
 		String texto = "";
 
-		// É necessário varrer todo o modelo, olhando todas as associações com recursos,
-		// para identificar aquelas que estão associadas com o elemento em questão.
+		// ï¿½ necessï¿½rio varrer todo o modelo, olhando todas as associaï¿½ï¿½es com recursos,
+		// para identificar aquelas que estï¿½o associadas com o elemento em questï¿½o.
 		for (ModelElementInstance dataElement : dataTypeList) {
 			ModelElementType refType = modelInstance.getModel().getType(classeSourceOrTarget);
 			Collection<ModelElementInstance> refTypeList = dataElement.getChildElementsByType(refType);
@@ -540,7 +540,7 @@ public abstract class BpmnParaSentencas {
 
 		}
 
-		// Tratamento para eventos de borda: Verificar se há eventos de borda associados
+		// Tratamento para eventos de borda: Verificar se hï¿½ eventos de borda associados
 		// com a atividade
 		if (getTipoDeElementoBpmn(elementoOrigem).equals(TipoDeElementoEnum.ATIVIDADE.getTipo())) {
 
@@ -589,8 +589,8 @@ public abstract class BpmnParaSentencas {
 
 	private static String getTipoDeElementoBpmn(ElementoBpmn elemento) {
 
-		// O atributo "tipoDeElementoBPMN" da classe Sentença, é definido a partir do
-		// tipo de elemento do próprio modelo, porém são considerados apenas os que são
+		// O atributo "tipoDeElementoBPMN" da classe Sentenï¿½a, ï¿½ definido a partir do
+		// tipo de elemento do prï¿½prio modelo, porï¿½m sï¿½o considerados apenas os que sï¿½o
 		// do tipo Evento, Atividade ou Gateway.
 		String tipoDeElemento = elemento.getTipo().toLowerCase();
 

@@ -320,7 +320,7 @@ public class CenaBean implements Serializable {
 			}
 		}
 
-		System.out.println("Quantidade de sentenças sem cena: " + quantidadeDeSentencasSemCena);
+		System.out.println("Quantidade de sentenÃ§as sem cena: " + quantidadeDeSentencasSemCena);
 
 		return quantidadeDeSentencasSemCena;
 	}

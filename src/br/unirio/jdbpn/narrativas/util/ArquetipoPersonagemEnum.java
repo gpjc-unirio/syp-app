@@ -5,8 +5,8 @@ import java.util.List;
 
 public enum ArquetipoPersonagemEnum {
 
-	ARQUETIPO_HEROI("HerÛi"), ARQUETIPO_ARAUTO("Arauto"), ARQUETIPO_MENTOR("Mentor"), ARQUETIPO_GUARDIAO("Guardi„o"),
-	ARQUETIPO_ALIVIO("AlÌvio"), ARQUETIPO_CAMALEAO("Camale„o"), ARQUETIPO_VILAO("Vil„o");
+	ARQUETIPO_HEROI("Her√≥i"), ARQUETIPO_ARAUTO("Arauto"), ARQUETIPO_MENTOR("Mentor"), ARQUETIPO_GUARDIAO("Guardi√£o"),
+	ARQUETIPO_ALIVIO("Al√≠vio"), ARQUETIPO_CAMALEAO("Camale√£o"), ARQUETIPO_VILAO("Vil√£o");
 
 	private final String arquetipo;
 

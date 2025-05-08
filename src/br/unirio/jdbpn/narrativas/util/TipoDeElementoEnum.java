@@ -3,7 +3,7 @@ package br.unirio.jdbpn.narrativas.util;
 public enum TipoDeElementoEnum {
 
 	EVENTO_INICIAL("Evento Inicial"),
-	EVENTO_INTERMEDIARIO("Evento Intermedi·rio"),
+	EVENTO_INTERMEDIARIO("Evento Intermedi√°rio"),
 	EVENTO_FINAL("Evento Final"),
 	EVENTO_BORDA("Evento de Borda"),
 	ATIVIDADE("Atividade"),

@@ -111,7 +111,7 @@ public class DialogoBean implements Serializable {
 			this.dialogosDaCena = new DialogoDao().buscarPorCena(cena);
 		} catch (Exception e) {
 			context.addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Falha na alteraÁ„o da ordem das falas."));
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Falha na altera√ß√£o da ordem das falas."));
 			e.printStackTrace();
 		}
 
@@ -136,7 +136,7 @@ public class DialogoBean implements Serializable {
 			this.dialogosDaCena = new DialogoDao().buscarPorCena(cena);
 		} catch (Exception e) {
 			context.addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Falha na alteraÁ„o da ordem das falas."));
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Falha na altera√ß√£o da ordem das falas."));
 			e.printStackTrace();
 		}
 
@@ -165,7 +165,7 @@ public class DialogoBean implements Serializable {
 			this.dialogosDaCena = new DialogoDao().buscarPorCena(cena);
 		} catch (Exception e) {
 			context.addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Falha na alteraÁ„o da ordem das falas."));
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Falha na altera√ß√£o da ordem das falas."));
 			e.printStackTrace();
 		}
 
@@ -194,7 +194,7 @@ public class DialogoBean implements Serializable {
 			novoDialogo.setPersonagem(personagem);
 			novoDialogo.setCena(cena);
 
-			// EdiÁ„o de di·logo j· cadastrado
+
 			if (novoDialogo.getId() > 0) {
 				new DAO<Dialogo>(Dialogo.class).atualiza(novoDialogo);
 			} else {
@@ -209,7 +209,7 @@ public class DialogoBean implements Serializable {
 
 		} catch (Exception e) {
 			context.addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Falha no registro do di·logo."));
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Falha no registro do di√°logo."));
 			e.printStackTrace();
 		}
 

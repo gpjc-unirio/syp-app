@@ -94,28 +94,28 @@ public abstract class GeradorDeRoteiroHtml {
 	}
 
 	private static String incluirCenaNoRoteiro(Sentenca sentenca) {
-		// Cabeçalho da cena
+		// Cabecalho da cena
 		String texto = "<div class=\"cena-titulo\"><span class=\"cena-numero\">" + sentenca.getNumero() + "</span> "
 				+ sentenca.getSentencaCompleta() + "</div>";
 		List<RelacaoSentencas> relacoes = sentenca.getSentencasFilhas();
 
-		// Transições da cena
+		// Transicoes da cena
 		if (relacoes.size() > 1) {
 			texto = texto + "<div class=\"transicao\">";
 			for (RelacaoSentencas relacao : relacoes) {
-				texto = texto + "se for " + relacao.getNomeOpcao() + ", vai para a cena nº "
+				texto = texto + "se for " + relacao.getNomeOpcao() + ", vai para a cena nÂº "
 						+ relacao.getSentencaFilha().getNumero() + ". ";
 			}
 			texto = texto + "</div>";
 		} else if (relacoes.size() > 0) {
-			texto = texto + "<div class=\"transicao\">vai para a cena nº "
+			texto = texto + "<div class=\"transicao\">vai para a cena nÂº "
 					+ relacoes.iterator().next().getSentencaFilha().getNumero() + "</div>";
 		}
 		return texto;
 	}
 
 	private static String incluirCenaNoRoteiro(Cena cena) {
-		// Cabeçalho da cena
+		// Cabecalho da cena
 		String local = cena.getLocal();
 		String tempo = cena.getTempo();	
 			
@@ -134,9 +134,9 @@ public abstract class GeradorDeRoteiroHtml {
 		texto = texto + "<div class=\"acao\">[LOCAL]: " + local + "</div>";
 		
 
-		// Ação, personagens e diálogos da cena
+		// Acao, personagens e dialogos da cena
 		if (cena.getDescricaoBreve() != null && cena.getDescricaoBreve().length() > 1) {
-			texto = texto + "<div class=\"acao\">[DESCRIÇÃO DA CENA]: " + cena.getDescricaoBreve() + "</div>";
+			texto = texto + "<div class=\"acao\">[DESCRIÃ‡ÃƒO DA CENA]: " + cena.getDescricaoBreve() + "</div>";
 		}
 		
 		List<Dialogo> dialogos = new DialogoDao().buscarPorCena(cena);
@@ -156,7 +156,7 @@ public abstract class GeradorDeRoteiroHtml {
 			texto = texto + "<div class=\"acao\">" + cena.getResultados() + "</div>";
 		}
 
-		// Transições da cena
+		// Transicoes da cena
 		if (cena.getGatilhos() != null && cena.getGatilhos().length() > 1) {
 			texto = texto + "<div class=\"transicao\">" + cena.getGatilhos() + "</div>";
 		}

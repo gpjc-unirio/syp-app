@@ -32,7 +32,7 @@ public class UsuarioBean implements Serializable {
 		FacesContext context = FacesContext.getCurrentInstance();
 
 		try {
-			System.out.println("Gravando usu·rio [" + this.usuario.getNomeUsuario() + "]");
+			System.out.println("Gravando usu√°rio [" + this.usuario.getNomeUsuario() + "]");
 
 			String criptografia = BCrypt.gensalt();
 			String senhaCriptografada = BCrypt.hashpw(this.usuario.getSenhaUsuario(), criptografia);
@@ -43,14 +43,14 @@ public class UsuarioBean implements Serializable {
 
 			context.getExternalContext().getFlash().setKeepMessages(true);
 			context.addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso", "Usu·rio cadastrado com sucesso"));
+					new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso", "Usu√°rio cadastrado com sucesso"));
 
 			return "login?faces-redirect=true";
 
 		} catch (Exception e) {
 			context.getExternalContext().getFlash().setKeepMessages(true);
 			context.addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Falha no cadastro de usu·rio"));
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Falha no cadastro de usu√°rio"));
 			e.printStackTrace();
 
 			return "novoUsuario?faces-redirect=true";

@@ -90,7 +90,7 @@ public class PersonagemBean implements Serializable {
 	public void carregarProjetoPeloId() {
 		this.projeto = new DAO<Projeto>(Projeto.class).buscaPorId(this.projeto.getId());
 
-		// Atualização do log / contador de tempo
+
 		registrarLog(LogInfoEnum.TIPO_ENTRADA);
 	}
 
@@ -98,7 +98,7 @@ public class PersonagemBean implements Serializable {
 		this.personagem = new DAO<Personagem>(Personagem.class).buscaPorId(this.personagem.getId());
 		this.projeto = personagem.getProjeto();
 
-		// Atualização do log / contador de tempo
+
 		registrarLog(LogInfoEnum.TIPO_ENTRADA);
 	}
 
@@ -131,7 +131,7 @@ public class PersonagemBean implements Serializable {
 			context.addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso", "Personagem registrado com sucesso"));
 
-			// Atualização do log / contador de tempo
+
 			registrarLog(LogInfoEnum.TIPO_SAIDA);
 
 		} catch (Exception e) {

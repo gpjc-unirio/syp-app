@@ -91,7 +91,7 @@ public class ProjetoBean implements Serializable {
 			System.out.println("Gravando projeto [" + this.projeto.getNome() + "]");
 			new DAO<Projeto>(Projeto.class).adiciona(this.projeto);
 
-			// Atualização do log / contador de tempo
+			// Atualizacao do log / contador de tempo
 			Usuario usuario = new UsuarioDao()
 					.buscarPorEmail((String) context.getExternalContext().getSessionMap().get("usuarioEmail"));
 
@@ -129,7 +129,7 @@ public class ProjetoBean implements Serializable {
 			this.projeto.setStatus(StatusProjetoEnum.STATUS_ROTEIRO_ELABORADO.getStatus());
 			new DAO<Projeto>(Projeto.class).atualiza(this.projeto);
 
-			// Atualização do log / contador de tempo
+			// Atualizacao do log / contador de tempo
 			registrarLog(LogInfoEnum.TIPO_SAIDA);
 
 			context.getExternalContext().getFlash().setKeepMessages(true);
@@ -152,7 +152,7 @@ public class ProjetoBean implements Serializable {
 	public void carregarProjetoPeloId() {
 		this.projeto = new DAO<Projeto>(Projeto.class).buscaPorId(this.projeto.getId());
 
-		// Atualização do log / contador de tempo
+		// Atualizacao do log / contador de tempo
 		if (this.viewName != null && this.viewName.equals("registrarRoteiro")) {
 			registrarLog(LogInfoEnum.TIPO_ENTRADA);
 		}

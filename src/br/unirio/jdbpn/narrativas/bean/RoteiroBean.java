@@ -112,7 +112,7 @@ public class RoteiroBean implements Serializable {
 
 			ec.getFlash().setKeepMessages(true);
 			fc.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro",
-					"Ocorreu algum erro na geração do arquivo ink. Causa: " + e.getLocalizedMessage()));
+					"Ocorreu algum erro na geraÃ§Ã£o do arquivo ink. Causa: " + e.getLocalizedMessage()));
 			e.printStackTrace();
 
 		}

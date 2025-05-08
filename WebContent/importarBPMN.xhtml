@@ -113,9 +113,11 @@
 								rendered="#{sentencaBean.personagens.size() > 0}">
 								#{personagem.nome} (#{personagem.funcao})
 							</p:dataList>
-							<p:link outcome="comporCena" value="#{languageBean.btnEditarCena}">
+							<p:link outcome="comporCena" value="#{languageBean.btnEditarCena}"
+									rendered="#{not empty sentencaBean.sentenca.cena}">
 								<f:param name="cenaId" value="#{sentencaBean.sentenca.cena.id}" />
 							</p:link>
+
 
 						</h:panelGrid>
 					</p:fieldset>
