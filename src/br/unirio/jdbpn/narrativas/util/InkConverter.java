@@ -10,12 +10,9 @@ import java.util.List;
 
 import br.unirio.jdbpn.narrativas.dao.CenaDao;
 import br.unirio.jdbpn.narrativas.dao.DialogoDao;
+import br.unirio.jdbpn.narrativas.dao.PersonagemDao;
 import br.unirio.jdbpn.narrativas.dao.SentencaDao;
-import br.unirio.jdbpn.narrativas.model.Cena;
-import br.unirio.jdbpn.narrativas.model.Dialogo;
-import br.unirio.jdbpn.narrativas.model.Projeto;
-import br.unirio.jdbpn.narrativas.model.RelacaoSentencas;
-import br.unirio.jdbpn.narrativas.model.Sentenca;
+import br.unirio.jdbpn.narrativas.model.*;
 
 public abstract class InkConverter {
 
@@ -138,6 +135,26 @@ public abstract class InkConverter {
 			// Tempo da cena
 			if (cena.getTempo() != null && cena.getTempo().length() > 1) {
 				bufferedWriter.write(indentacao(qtdDeIndentacao) + "Tempo: " + cena.getTempo());
+				bufferedWriter.newLine();
+			}
+
+			//Personagens envolvidos
+			List<Personagem> personagens = new PersonagemDao().buscarPorCena(cena);
+			if(personagens != null && personagens.size() > 0) {
+				String personagensStr = "";
+				for (Personagem personagem : personagens) {
+					personagensStr = personagensStr + "; " + personagem.getNome() + " (" + personagem.getFuncao() +")";
+				}
+
+				if(!personagensStr.trim().equals("")){
+
+					personagensStr = personagensStr.substring(1).trim();
+
+					bufferedWriter.write(indentacao(qtdDeIndentacao) + "Personagens: " + personagensStr);
+					bufferedWriter.newLine();
+				}
+			}else{
+				bufferedWriter.write(indentacao(qtdDeIndentacao) + "Personagens: Sem personagens associados a cena. ");
 				bufferedWriter.newLine();
 			}
 

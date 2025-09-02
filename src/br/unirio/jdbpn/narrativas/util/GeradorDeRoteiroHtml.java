@@ -2,16 +2,8 @@ package br.unirio.jdbpn.narrativas.util;
 
 import java.util.List;
 
-import br.unirio.jdbpn.narrativas.dao.CenaDao;
-import br.unirio.jdbpn.narrativas.dao.DialogoDao;
-import br.unirio.jdbpn.narrativas.dao.SentencaDao;
-import br.unirio.jdbpn.narrativas.dao.UsuarioDao;
-import br.unirio.jdbpn.narrativas.model.Cena;
-import br.unirio.jdbpn.narrativas.model.Dialogo;
-import br.unirio.jdbpn.narrativas.model.Projeto;
-import br.unirio.jdbpn.narrativas.model.RelacaoSentencas;
-import br.unirio.jdbpn.narrativas.model.Sentenca;
-import br.unirio.jdbpn.narrativas.model.Usuario;
+import br.unirio.jdbpn.narrativas.dao.*;
+import br.unirio.jdbpn.narrativas.model.*;
 
 public abstract class GeradorDeRoteiroHtml {
 
@@ -132,7 +124,24 @@ public abstract class GeradorDeRoteiroHtml {
 			local = TipoDeLocalEnum.valueOf(cena.getTipoDeLocal()).getAbreviado() + " " + local;
 		}
 		texto = texto + "<div class=\"acao\">[LOCAL]: " + local + "</div>";
-		
+
+		//Personagens envolvidos
+		List<Personagem> personagens = new PersonagemDao().buscarPorCena(cena);
+		if(personagens != null && personagens.size() > 0) {
+			String personagensStr = "";
+			for (Personagem personagem : personagens) {
+				personagensStr = personagensStr + "; " + personagem.getNome() + " (" + personagem.getFuncao() +")";
+			}
+
+			if(!personagensStr.trim().equals("")){
+
+				personagensStr = personagensStr.substring(1);
+
+				texto = texto + "<div class=\"acao\">[PERSONAGENS]: " + personagensStr + "</div>";
+			}
+		}else{
+			texto = texto + "<div class=\"acao\">[PERSONAGENS]: Sem personagens associados a cena.</div>";
+		}
 
 		// Acao, personagens e dialogos da cena
 		if (cena.getDescricaoBreve() != null && cena.getDescricaoBreve().length() > 1) {
