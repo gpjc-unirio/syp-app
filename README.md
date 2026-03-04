@@ -31,12 +31,12 @@
 
 **SYPApp** is built using:
 
-* [Java](https://java.com/), considering JAVA EE using JSF (JavaServer Pages) v2.2.
+* [Java](https://java.com/), considering JAVA EE using JSF (JavaServer Pages) v2.2. (We develop the system with the Java 17 - JDK) [Need to install]
 * [JavaServer Faces Technology](https://www.oracle.com/java/technologies/javaserverfaces.html) a Java technology for building server-side user interfaces to the web.
 * [Prime Faces](https://www.primefaces.org/) version 8.0, for some components. 
 * [Hibernate](https://hibernate.org/), for ORM framework that connects the database to software features. 
-* [Tomcat](https://tomcat.apache.org/download-90.cgi) v.9, apache server for Java web.
-* [MySQL](https://www.mysql.com/) v. 5.7, for database repositories. 
+* [Tomcat](https://tomcat.apache.org/download-90.cgi) v.9, apache server for Java web. [Need to install]
+* [MariaDB](https://mariadb.com/downloads/) v. 12.2.2, for database repositories. [Need to install] 
 * [BPMN](https://www.omg.org/spec/BPMN/2.0/About-BPMN/), as business process language to convert into narrative elements. 
 * [Camunda](https://github.com/camunda/camunda-modeler) v. 7.1.0 library for manipulate BPMN files.
 
@@ -45,7 +45,8 @@
 
 To build the project:
 
-* Install [MySQL](https://www.mysql.com/) if you don't already have it. After that, create a database instance or schema (we recommend the name syp for te instance) and a user with root permission (create, update and delete the database metadata and records)
+* Install [MariaDB](https://mariadb.com/downloads/) if you don't already have it. After that, create a database instance or schema (we recommend the name syp for te instance) and a user with root permission (create, update and delete the database metadata and records)
+* Install [Tomcat](https://tomcat.apache.org/download-90.cgi) to prepara the web server.
 * Install [IntelliJ IDE](https://www.jetbrains.com/idea/download/) to edit the Java code.
 * Clone the repository
 * Import the source code into Eclipse
